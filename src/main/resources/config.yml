@@ -1,0 +1,20 @@
+DATABASE:
+  USE: "mongo" #You can use either "mongo" or "mysql"
+  MONGO:
+    LOCALHOST_NO_AUTH: false #Only use this if you know what it is, this will replace URI if enabled.
+    URI: "mongodb://user:pass@127.0.0.1/core"
+    DB: "core"
+  MYSQL:
+    HOST: "127.0.0.1"
+    PORT: 3306
+    USER: "punishu"
+    PASSWORD: "abc123"
+    DATABASE: "core"
+  REDIS:
+    ENABLED: true
+    HOST: "127.0.0.1"
+    PORT: 6379
+    CHANNEL: "punishu"
+
+GENERAL:
+  SERVER_NAME: "Unspecified"
