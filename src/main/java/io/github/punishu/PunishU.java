@@ -21,6 +21,7 @@ import redis.clients.jedis.Jedis;
 import xyz.leuo.gooey.Gooey;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 public class PunishU extends JavaPlugin {
     private CommandMap commandMap;
@@ -46,6 +47,11 @@ public class PunishU extends JavaPlugin {
         // Mongo
         if (getConfig().getString("DATABASE.USE").equals("mongo")) {
             this.mongo = new Mongo(this);
+        } else if (getConfig().getString("DATABASE.USE").equals("mysql")) {
+            //do something
+        } else {
+            getLogger().log(Level.SEVERE, "YOU MUST SELECT EITHER  ");
+            onDisable();
         }
 
         // Redis

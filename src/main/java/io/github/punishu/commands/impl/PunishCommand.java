@@ -79,6 +79,7 @@ public class PunishCommand extends BaseCommand {
                 }
 
                 GUI gui = new GUI(Locale.PUNISH_TITLE.format(plugin).replace("%player%", targetName), 45);
+                silent = true;
 
                 gui.setUpdate(new GUIUpdate() {
                     @Override

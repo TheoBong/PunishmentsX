@@ -57,7 +57,7 @@ public class PunishmentManager {
     }
 
     public void pull(boolean async, UUID uuid, boolean store, MongoDeserializedResult mdr) {
-        plugin.getMongo().getDocument(async, "punishments", uuid, d -> {
+        plugin.getMongo().getDocument(async, Locale.MONGO_DATABASE.format(plugin), uuid, d -> {
             if(d != null) {
                 Punishment punishment = new Punishment(plugin, uuid);
                 punishment.importFromDocument(d);
@@ -73,17 +73,10 @@ public class PunishmentManager {
     }
 
     public void push(boolean async, Punishment punishment, boolean unload) {
-        MongoUpdate mu = new MongoUpdate("punishments", punishment.getUuid());
+        MongoUpdate mu = new MongoUpdate(Locale.MONGO_DATABASE.format(plugin), punishment.getUuid());
         mu.setUpdate(punishment.export());
         plugin.getMongo().massUpdate(async, mu);
-
-        JsonObject json = new JsonObject();
-        json.addProperty("action", RedisAction.PUNISHMENT_UPDATE.toString());
-        json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
-        json.addProperty("punishment", punishment.getUuid().toString());
-
-        plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage(Locale.REDIS_CHANNEL.format(plugin), json));
-
+        
         if(unload) {
             punishments.remove(punishment.getUuid());
         }

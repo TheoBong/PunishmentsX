@@ -1,27 +1,121 @@
+#
+# Config.yml - PunishmentsX
+# Made with love by Cowings.
+#
+# Unauthorized redistribution prohibited.
+#
+
 DATABASE:
-  USE: "mongo" #You can use either "mongo" or "mysql"
+  #Recommend using MongoDB rather than MySQL (Required for storing data).
+  #Redis is required for cross server synchronization.
+
+  # You can use either "mongo" or "mysql" (Must use 1 of them)
+  USE: "mongo"
+
+  # MongoDB Fields - only applied if 'USE' option is set to "mongo"
   MONGO:
-    LOCALHOST_NO_AUTH: true #Only use this if you know what it is, this will replace URI if enabled.
+    LOCALHOST_NO_AUTH: true # Only use this if you know what it is, this will replace URI if enabled.
     URI: "mongodb://user:pass@127.0.0.1/punishments"
     DB: "punishments"
+
+  # MySQL Fields - only applied if 'USE' option is set to "mysql"
   MYSQL:
     HOST: "127.0.0.1"
     PORT: 3306
     USER: "user"
     PASSWORD: "password"
     DATABASE: "punishments"
+
+  # Redis is completely optional (plugin will work without it).
+  # If enabled, all servers connected will be in sync.
   REDIS:
-    ENABLED: true
+    ENABLED: false
     HOST: "127.0.0.1"
     PORT: 6379
     CHANNEL: "punishments"
 
-WEBHOOK:
-  LINK: ""
-  COLOR: 15258703
+GENERAL:
+  SERVER_NAME: "Unspecified" # Example: lobby, kitpvp, factions, etc
+  CONSOLE_NAME: "CONSOLE"
+  DISCORD_WEBHOOK:
+    LINK: ""
+    COLOR: 15258703
+
+
+# Advanced chat filter built into the plugin
+FILTER:
+
+  # When these words are seen, they are blocked.
+  # Advanced option means that the filter will check for common bypasses
+  # Example: sh1t will still be blocked because the filter knows "1" is the same as "i"
+  BLACKLISTED_WORDS:
+    ENABLED: true
+    ADVANCED: true
+    PUNISHMENT_ENABLED: true # If true, it will punish the player from the stack, if false, it will just block the message.
+    PUNISHMENT_STACK: "FOUL_LANGUAGE" # Use the identifier
+    LIST:
+      - "fuck"
+      - "shit"
+      - "otherbadwords"
+
+  # If these 2 words are in the same message, it is blocked.
+  NEGATIVE_WORD_PAIR:
+    ENABLED: true
+    PUNISHMENT_ENABLED: true
+    PUNISHMENT_STACK: "FOUL_LANGUAGE"
+    SERVER_WORD: "server"
+    NEGATIVE_WORDS:
+      - "trash"
+      - "bad"
+      - "awful"
+
+  # All links other than whitelisted ones will be blocked if enabled.
+  ANTI_ADVERTISING:
+    ENABLED: true
+    PUNISHMENT_ENABLED: true
+    PUNISHMENT_STACK: "ADVERTISING"
+    WHITELISTED_LINKS:
+      - "youtube.com"
+      - "youtu.be"
+      - "twitter.com"
+      - "twitch.tv"
+      - "yourserverwebsite.com"
 
 MESSAGES:
   NO_PERMISSION: "&cNo Permission!"
+  SILENT_PREFIX: "&7[Silent] "
+  BROADCAST: "%silentPrefix%&a%target% was %type% by %issuer%."
+  PUNISHMENT:
+    SUCCESS: "&aYou have %type% %target% for: %reason%."
+    HOVER:
+      - "&f&l * &c&l%type% %silentPrefix%"
+      - "&cVictim: &f%victimName%"
+      - "&cIssuer: &f%issuerName%"
+      - "&cReason: &f%reason%"
+    HOVER_TEMP: "&cExpires: &f%expiry%"
+  UNPUNISHMENT:
+    SUCCESS: "&aYou have un%type% %target% for: %reason%."
+    HOVER:
+      - "&f&l * &c&l%type% %silentPrefix%"
+      - "&cVictim: &f%victimName%"
+      - "&cReason: &f%reason%"
+      - "&cPardoner: &f%issuerName%"
+      - "&cPardon Reason: %reason%"
+  BLACKLIST_MESSAGE:
+    - "&4Your account has been blacklisted"
+    - "&fReason: %reason%"
+  BAN_MESSAGE:
+    - "&cYour account has been banned (Expiry: %expirationDate%)"
+    - "&fReason: %reason%"
+  WARN_MESSAGE:
+    - "&cYou have been warned by a staff member!"
+    - "&fReason: %reason%"
+  MUTE_MESSAGE:
+    - "&cYou have been muted for: &f%reason%."
+    - "&cExpiry: %expirationDate%"
+  KICK_MESSAGE:
+    - "You have been kicked by a staff member!"
+    - "&fReason: %reason%"
 
 PERMISSIONS:
   SILENT_VIEW: "punishments.view.silent" #See silent punishments in chat
@@ -34,15 +128,15 @@ MENUS:
   PUNISH:
     TITLE: "Punishing: %player%"
     SLOTS:
-      CHEATING:
-        NAME: "&c&lCheats"
-        MATERIAL: "DIAMOND_SWORD"
-        DEFAULT_REASON: "Cheating"
+      CHEATING: # Identifier
+        NAME: "&c&lCheats" # Name in GUI
+        MATERIAL: "DIAMOND_SWORD" # Material in GUI
+        DEFAULT_REASON: "Cheating" # Reason if none is specified in punish command
         PUNISHMENTS:
-          - "ban:30d"
-          - "ban:90d"
-          - "ban:365d"
-          - "ban:permanent"
+          - "ban:30d" # 1st offense
+          - "ban:90d" # 2nd offense
+          - "ban:365d" # 3rd offense
+          - "ban:permanent" # 4th offense
         LORE:
           - " "
           - "&fViolation #1: &e30 day &c(BAN)"

@@ -110,7 +110,7 @@ public class HistoryCommand extends BaseCommand {
 
         String issuerName;
         if (punishment.getIssuer() == null) {
-            issuerName = "Console";
+            issuerName = Locale.CONSOLE_NAME.format(plugin);
         } else {
             Player issuer = Bukkit.getPlayer(punishment.getIssuer());
             if (issuer != null) {
@@ -134,7 +134,7 @@ public class HistoryCommand extends BaseCommand {
             String pardonerName;
 
             if (punishment.getPardoner() == null) {
-                pardonerName = "Console";
+                pardonerName = Locale.CONSOLE_NAME.format(plugin);
             } else {
                 Player pardoner = Bukkit.getPlayer(punishment.getPardoner());
                 if (pardoner != null) {

@@ -1,18 +1,14 @@
 package io.github.punishu.punishments;
 
-import com.google.gson.JsonObject;
 import io.github.punishu.Locale;
 import io.github.punishu.PunishU;
-import io.github.punishu.database.redis.RedisAction;
-import io.github.punishu.database.redis.RedisMessage;
-import io.github.punishu.utils.Colors;
+import io.github.punishu.utils.Notifications;
 import io.github.punishu.utils.WebHook;
 import io.github.punishu.utils.WebPlayer;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -57,7 +53,7 @@ public @Data class Punishment {
     }
 
     public boolean isActive() {
-        boolean b = !type.equals(Type.KICK);
+        boolean b = true;
 
         if(expires != null) {
             if(expires.before(new Date())) {
@@ -78,40 +74,60 @@ public @Data class Punishment {
 
         String victimName, issuerName;
 
-        if(isActive() || type.equals(Type.KICK)) {
+        if(isActive()) {
             if (issuer != null) {
                 Player p = Bukkit.getPlayer(issuer);
                 issuerName = p.getName();
             } else {
-                issuerName = "Console";
+                issuerName = "isActive()";
             }
         } else {
             if (pardoner != null) {
                 Player p = Bukkit.getPlayer(pardoner);
                 issuerName = p.getName();
             } else {
-                issuerName = "Console";
+                issuerName = Locale.CONSOLE_NAME.format(plugin);
             }
         }
 
         if(player != null && player.isOnline()) {
             victimName = player.getName();
-            if(isActive() || type.equals(Type.KICK)) {
+            List<String> list = new ArrayList<>();
+            if(isActive()) {
                 switch (type) {
                     case BAN:
-                        player.kickPlayer(Colors.get("&cYour account has been banned (Expiry: " + expiry() + ").\n&fReason: " + issueReason));
+                        for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
+                            list.add(string
+                                    .replace("%expirationDate%", expiry())
+                                    .replace("%reason%", issueReason));
+                        }
+                        player.kickPlayer(String.join("\n", list));
                         break;
                     case BLACKLIST:
-                        player.kickPlayer(Colors.get("&4Your account has been blacklisted.\n&fReason: " + issueReason));
+                        for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
+                            list.add(string.replace("%reason%", issueReason));
+                        }
+                        player.kickPlayer(String.join("\n", list));
                         break;
                     case MUTE:
-                        player.sendMessage(Colors.get("&cYou have been muted for: " + ChatColor.WHITE + this.issueReason + ".\n&cExpiry: " + expiry()));
+                        for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
+                            list.add(string
+                                    .replace("%expirationDate%", expiry())
+                                    .replace("%reason%", issueReason));
+                        }
+                        player.sendMessage(String.join("\n", list));
                         break;
                     case KICK:
-                        player.kickPlayer(ChatColor.RED + "You have been kicked for: " + ChatColor.WHITE + this.issueReason);
+                        for (String string : Locale.KICK_MESSAGE.formatLines(plugin)) {
+                            list.add(string.replace("%reason%", issueReason));
+                        }
+                        player.kickPlayer(String.join("\n", list));
                         break;
                     case WARN:
-                        player.sendMessage(Colors.get("&cYou have been warned for: &f" + this.issueReason));
+                        for (String string : Locale.WARN_MESSAGE.formatLines(plugin)) {
+                            list.add(string.replace("%reason%", issueReason));
+                        }
+                        player.sendMessage(String.join("\n", list));
                         break;
                 }
             }
@@ -120,48 +136,47 @@ public @Data class Punishment {
             victimName = wp.getName();
         }
 
-        StringBuilder sb = new StringBuilder();
-        if(isActive() || type.equals(Type.KICK)) {
-            sb.append("&f&l * &c&l" + StringUtils.capitalize(type.toString().toLowerCase()) + (silentIssue ? " &7[Silent]" : ""));
-            sb.append("\n&cVictim: &f" + victimName);
-            sb.append("\n&cIssuer: &f" + issuerName);
-            sb.append("\n&cReason: &f" + this.issueReason);
-            if(!type.equals(Type.KICK)) {
-                sb.append("\n&cExpires: &f" + (this.expires == null ? "Never" : this.expires.toString()));
+        String hover;
+        if (isActive()) {
+            List<String> list = new ArrayList<>();
+            for (String string : Locale.PUNISHMENT_HOVER.formatLines(plugin)) {
+                list.add(string
+                        .replace("%type%", StringUtils.capitalize(type.toString().toLowerCase()))
+                        .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
+                        .replace("%victimName%", victimName)
+                        .replace("%issuerName%", issuerName)
+                        .replace("%reason%", this.issueReason));
             }
+            if (!type.equals(Type.KICK) && !type.equals(Type.WARN)) list.add(Locale.PUNISHMENT_HOVER_TEMP.format(plugin)
+                    .replace("%expiry%", this.expires == null ? "Never" : this.expires.toString()));
 
+            hover = String.join("\n", list);
             WebHook.sendWebhook(plugin, type.toString(), victimName, issueReason, issuerName, null, this.expires == null ? "Never" : this.expires.toString());
         } else {
-            sb.append("&f&l * &c&lUn" + type.toString().toLowerCase() + (silentPardon ? " &7[Silent]" : ""));
-            sb.append("\n&cVictim: &f" + victimName);
-            sb.append("\n&cReason: &f" + issueReason);
-            sb.append("\n&cPardoner: &f" + issuerName);
-            sb.append("\n&cPardon Reason: &f" + pardonReason);
+            List<String> list = new ArrayList<>();
+            for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
+                list.add(string
+                        .replace("%type%", StringUtils.capitalize(type.toString().toLowerCase()))
+                        .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
+                        .replace("%victimName%", victimName)
+                        .replace("%reason%", this.issueReason)
+                        .replace("%issuerName%", issuerName)
+                        .replace("%pardonReason%", pardonReason));
+            }
 
+            hover = String.join("\n", list);
             WebHook.sendWebhook(plugin, "UN" + type.toString(), victimName, issueReason, issuerName, pardonReason, null);
         }
 
-        String message;
-        if(type.equals(Type.KICK) || type.equals(Type.WARN)) {
-            message = "&f" + victimName + "&a was " + type.pastMessage() + " by " + issuerName + "&a.";
-        } else {
-            message = "&f" + victimName + "&a was " + (this.isActive() ? (this.expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage() + " by " + issuerName + "&a.";
-        }
-        JsonObject j = new JsonObject();
-        RedisMessage rm = new RedisMessage(Locale.REDIS_CHANNEL.format(plugin), j);
+        String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (this.isActive() ? (this.expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
 
-        if(this.isActive() ? silentIssue : silentPardon) {
-            j.addProperty("action", RedisAction.PUNISHMENT_SILENT.toString());
-            j.addProperty("message", "&7[Silent] " + message);
-            j.addProperty("hover", sb.toString());
-        } else {
-            j.addProperty("action", RedisAction.PUNISHMENT.toString());
-            j.addProperty("message", message);
-            j.addProperty("hover", sb.toString());
-        }
+        String message = Locale.BROADCAST.format(plugin)
+                .replace("%target%", victimName)
+                .replace("%type%", typeString)
+                .replace("%issuer%", issuerName);
 
-        Queue<RedisMessage> queue = plugin.getRedisPublisher().getMessageQueue();
-        queue.add(rm);
+        boolean silent = this.isActive() ? silentIssue : silentPardon;
+        Notifications.sendMessage(plugin, silent, message, hover);
     }
 
     public void importFromDocument(Document d) {

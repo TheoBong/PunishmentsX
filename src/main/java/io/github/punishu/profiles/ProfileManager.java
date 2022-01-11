@@ -1,6 +1,7 @@
 package io.github.punishu.profiles;
 
 import com.google.gson.JsonObject;
+import io.github.punishu.Locale;
 import io.github.punishu.PunishU;
 import io.github.punishu.database.mongo.MongoDeserializedResult;
 import io.github.punishu.database.mongo.MongoUpdate;
@@ -68,16 +69,18 @@ public class ProfileManager {
     }
 
     public void push(boolean async, Profile profile, boolean unload) {
-        MongoUpdate mu = new MongoUpdate("profiles", profile.getUuid());
+        MongoUpdate mu = new MongoUpdate(Locale.MONGO_DATABASE.format(plugin), profile.getUuid());
         mu.setUpdate(profile.export());
         plugin.getMongo().massUpdate(async, mu);
 
-        JsonObject json = new JsonObject();
-        json.addProperty("action", RedisAction.PROFILE_UPDATE.toString());
-        json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
-        json.addProperty("uuid", profile.getUuid().toString());
+        if (plugin.getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
+            JsonObject json = new JsonObject();
+            json.addProperty("action", RedisAction.PROFILE_UPDATE.toString());
+            json.addProperty("fromServer", plugin.getConfig().getString("GENERAL.SERVER_NAME"));
+            json.addProperty("uuid", profile.getUuid().toString());
 
-        plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("PunishU", json));
+            plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage(Locale.REDIS_CHANNEL.format(plugin), json));
+        }
 
         if(unload) {
             profiles.remove(profile.getUuid());

@@ -1,5 +1,6 @@
 package io.github.punishu;
 
+import io.github.punishu.utils.Colors;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 
@@ -10,8 +11,26 @@ import java.util.List;
 @AllArgsConstructor
 public enum Locale {
 	REDIS_CHANNEL("DATABASE.REDIS.CHANNEL"),
+	MONGO_DATABASE("DATABASE.MONGO.DB"),
+	MONGO_URI("DATABASE.MONGO.URI"),
 
 	NO_PERMISSION("MESSAGES.NO_PERMISSION"),
+	SERVER_NAME("GENERAL.SERVER_NAME"),
+	CONSOLE_NAME("GENERAL.CONSOLE_NAME"),
+
+	BLACKLIST_MESSAGE("MESSAGES.BLACKLIST_MESSAGE"),
+	BAN_MESSAGE("MESSAGES.BAN_MESSAGE"),
+	MUTE_MESSAGE("MESSAGES.MUTE_MESSAGE"),
+	KICK_MESSAGE("MESSAGES.KICK_MESSAGE"),
+	WARN_MESSAGE("MESSAGES.WARN_MESSAGE"),
+	SILENT_PREFIX("MESSAGES.SILENT_PREFIX"),
+	BROADCAST("MESSAGES.BROADCAST"),
+	PUNISHMENT_SUCCESS("MESSAGES.PUNISHMENT.SUCCESS"),
+	PUNISHMENT_HOVER("MESSAGES.PUNISHMENT.HOVER"),
+	PUNISHMENT_HOVER_TEMP("MESSAGES.PUNISHMENT.HOVER_TEMP"),
+	UNPUNISHMENT_SUCCESS("MESSAGES.UNPUNISHMENT.SUCCESS"),
+	UNPUNISHMENT_HOVER("MESSAGES.UNPUNISHMENT.HOVER"),
+
 
 	SILENT_PERMISSION("PERMISSIONS.SILENT_VIEW"),
 	HISTORY_PERMISSION("PERMISSIONS.HISTORY"),
@@ -36,5 +55,15 @@ public enum Locale {
 
 	public String format(PunishU plugin) {
 		return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString(path));
+	}
+
+	public List<String> formatLines(PunishU plugin) {
+		List<String> lines = new ArrayList<>();
+
+		for (String string : plugin.getConfig().getStringList(path)) {
+			lines.add(Colors.get(string));
+		}
+
+		return lines;
 	}
 }

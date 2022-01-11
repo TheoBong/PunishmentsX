@@ -17,7 +17,7 @@ public class Filter {
     private static final List<NegativeWordPair> NEGATIVE_WORD_PAIRS;
     private static final String[] SINGLE_FILTERED_WORDS = {};
     private static final String[] WHITELISTED_LINKS = {
-            "kitpvp.cc", "youtube.com", "youtu.be", "imgur.com", "prntscr.com", "prnt.sc", "gfycat.com", "gyazo.com",
+            "youtube.com", "youtu.be", "imgur.com", "prntscr.com", "prnt.sc", "gfycat.com", "gyazo.com",
             "twitter.com", "spotify.com", "twitch.tv", "tinypic.com"
     };
 

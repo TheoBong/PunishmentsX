@@ -70,7 +70,7 @@ public class UnpunishCommands extends BaseCommand {
             }
 
             UUID pardoner = null;
-            String pardonerName = "&4Console";
+            String pardonerName = Locale.CONSOLE_NAME.format(plugin);
             if(sender instanceof Player) {
                 Player player = (Player) sender;
                 pardonerName = player.getName();
@@ -100,7 +100,10 @@ public class UnpunishCommands extends BaseCommand {
                 punishment.execute();
                 plugin.getPunishmentManager().push(true, punishment, false);
 
-                sender.sendMessage(Colors.get("&aYou have un" + punishmentType.pastMessage() + " " + profile.getName() + " for:&f " + sb.toString() + "."));
+                sender.sendMessage(Locale.UNPUNISHMENT_SUCCESS.format(plugin)
+                        .replace("%type%", punishmentType.pastMessage())
+                        .replace("%target%", profile.getName())
+                        .replace("%reason%", sb.toString()));
             } else {
                 sender.sendMessage(ChatColor.RED + "The target you specified does not have an active punishment of that type.");
             }

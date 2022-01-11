@@ -76,7 +76,7 @@ public class PunishCommands extends BaseCommand {
             }
 
             UUID issuer = null;
-            String issuerName = "&4Console";
+            String issuerName = Locale.CONSOLE_NAME.format(plugin);
             if(sender instanceof Player) {
                 Player player = (Player) sender;
 
@@ -103,7 +103,10 @@ public class PunishCommands extends BaseCommand {
 
                 profile.punish(punishmentType, "MANUAL", issuer, sb.toString(), null, silent);
 
-                sender.sendMessage(Colors.get("&aYou have " + punishmentType.pastMessage() + " " + profile.getName() + " for:&f " + sb.toString() + "."));
+                sender.sendMessage(Locale.PUNISHMENT_SUCCESS.format(plugin)
+                        .replace("%type%", punishmentType.pastMessage())
+                        .replace("%target%", profile.getName())
+                        .replace("%reason%", sb.toString()));
             } else {
                 sender.sendMessage(ChatColor.RED + "The target you specified already has an active punishment of that type.");
             }
