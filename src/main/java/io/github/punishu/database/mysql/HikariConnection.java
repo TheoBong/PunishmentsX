@@ -59,15 +59,15 @@ public class HikariConnection {
             hikariDataSource.close();
     }
 
-    public void saveData(final Player player, final PlayerData playerData) {
-        this.asyncUpdate("UPDATE hsurvivalgames_stats SET "
-                + "points = " + playerData.getPoints() + ","
-                + "chatcolor = '" + playerData.getChatColor() + "',"
-                + "disguise = " + playerData.isDisguise() + ","
-                + "silentjoin = " + playerData.isSilentJoin() + ","
-                + "kills = " + playerData.getKills() + ","
-                + "deaths = " + playerData.getDeaths() + " WHERE uuid = '" + player.getUniqueId() + "'");
-    }
+//    public void saveData(final Player player, final PlayerData playerData) {
+//        this.asyncUpdate("UPDATE hsurvivalgames_stats SET "
+//                + "points = " + playerData.getPoints() + ","
+//                + "chatcolor = '" + playerData.getChatColor() + "',"
+//                + "disguise = " + playerData.isDisguise() + ","
+//                + "silentjoin = " + playerData.isSilentJoin() + ","
+//                + "kills = " + playerData.getKills() + ","
+//                + "deaths = " + playerData.getDeaths() + " WHERE uuid = '" + player.getUniqueId() + "'");
+//    }
 
     public Connection getConnection() throws SQLException {
         return hikariDataSource.getConnection();

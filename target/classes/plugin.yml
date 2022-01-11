@@ -1,0 +1,5 @@
+name: PunishU
+description: A GUI based punishments plugin.
+version: git-PunishU-d099c82
+author: Theo
+main: io.github.punishu.PunishU

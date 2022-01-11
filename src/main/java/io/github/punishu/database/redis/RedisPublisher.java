@@ -1,5 +1,6 @@
 package io.github.punishu.database.redis;
 
+import io.github.punishu.Locale;
 import io.github.punishu.PunishU;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
@@ -20,7 +21,7 @@ public class RedisPublisher {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, ()-> {
             if(!messageQueue.isEmpty()) {
                 RedisMessage redisMessage = messageQueue.poll();
-                jedis.publish(plugin.getConfig().getString("networking.redis.channel"), redisMessage.getMessage().toString());
+                jedis.publish(Locale.REDIS_CHANNEL.format(plugin), redisMessage.getMessage().toString());
             }
         }, 1, 1);
     }

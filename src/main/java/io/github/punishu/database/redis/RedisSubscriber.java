@@ -1,5 +1,6 @@
 package io.github.punishu.database.redis;
 
+import io.github.punishu.Locale;
 import io.github.punishu.PunishU;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
@@ -21,7 +22,7 @@ public class RedisSubscriber {
         this.plugin = plugin;
         this.listeners = new HashSet<>();
 
-        this.rChannel = plugin.getConfig().getString("networking.redis.channel");
+        this.rChannel = Locale.REDIS_CHANNEL.format(plugin);
 
         this.jedisPubSub = new JedisPubSub() {
             @Override

@@ -21,17 +21,17 @@ public class Mongo {
         this.plugin = plugin;
 
         MongoClient mongoClient;
-        if (plugin.getConfig().getBoolean("networking.mongo.localhost")) {
+        if (plugin.getConfig().getBoolean("DATABASE.MONGO.LOCALHOST_NO_AUTH")) {
             mongoClient = MongoClients.create(MongoClientSettings.builder().uuidRepresentation(UuidRepresentation.STANDARD).build());
-            mongoDatabase = mongoClient.getDatabase(plugin.getConfig().getString("networking.mongo.db"));
+            mongoDatabase = mongoClient.getDatabase(plugin.getConfig().getString("DATABASE.MONGO.DB"));
         } else {
             MongoClientSettings mcs = MongoClientSettings.builder()
                     .uuidRepresentation(UuidRepresentation.STANDARD)
-                    .applyConnectionString(new ConnectionString(plugin.getConfig().getString("networking.mongo.uri")))
+                    .applyConnectionString(new ConnectionString(plugin.getConfig().getString("DATABASE.MONGO.URI")))
                     .build();
 
             mongoClient = MongoClients.create(mcs);
-            mongoDatabase = mongoClient.getDatabase(plugin.getConfig().getString("networking.mongo.db"));
+            mongoDatabase = mongoClient.getDatabase(plugin.getConfig().getString("DATABASE.MONGO.DB"));
         }
     }
 
