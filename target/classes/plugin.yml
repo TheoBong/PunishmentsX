@@ -1,5 +1,5 @@
-name: PunishU
-description: A GUI based punishments plugin.
-version: git-PunishU-e219bc5
-author: Theo
-main: io.github.punishu.PunishU
+name: PunishmentsX
+description: A GUI based punishments plugin (https://github.com/Cowings/PunishU).
+version: git-PunishmentsX-db64f88
+author: Cowings
+main: io.github.punishmentsx.PunishmentsX

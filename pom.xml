@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>PunishU</name>
+    <name>PunishmentsX</name>
     <groupId>io.github</groupId>
-    <artifactId>PunishU</artifactId>
+    <artifactId>PunishmentsX</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -36,34 +36,31 @@
             <artifactId>Gooey</artifactId>
             <version>1.2.2</version>
         </dependency>
+        <!-- MongoDB Driver -->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.1.1</version>
         </dependency>
+        <!-- Redis Driver -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.3.0</version>
         </dependency>
+        <!-- GSON Library -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.2.4</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Okhttp3 -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.8.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>3.4.5</version>
-        </dependency>
-
     </dependencies>
     <build>
         <defaultGoal>clean package</defaultGoal>
@@ -89,7 +86,7 @@
                     <execution>
                         <phase>initialize</phase>
                         <configuration>
-                            <format>git-PunishU-%s</format>
+                            <format>git-PunishmentsX-%s</format>
                             <scmDirectory>${project.basedir}</scmDirectory>
                             <descriptionProperty>punishu.desc</descriptionProperty>
                         </configuration>

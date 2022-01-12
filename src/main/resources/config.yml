@@ -45,14 +45,23 @@ GENERAL:
 # Advanced chat filter built into the plugin
 FILTER:
 
+  # None of the options below will do anything if this is disabled.
+  ENABLED: true
+
   # When these words are seen, they are blocked.
   # Advanced option means that the filter will check for common bypasses
   # Example: sh1t will still be blocked because the filter knows "1" is the same as "i"
+  ADVANCED: true
+
+  # Unicode characters are very commonly used by hacked clients to bypass filters.
+  # Recommended to keep this option as true in order for the filter to work.
+  BLOCK_UNICODE: false
+
   BLACKLISTED_WORDS:
     ENABLED: true
-    ADVANCED: true
     PUNISHMENT_ENABLED: true # If true, it will punish the player from the stack, if false, it will just block the message.
     PUNISHMENT_STACK: "FOUL_LANGUAGE" # Use the identifier
+    PUNISHMENT_SILENT: true
     LIST:
       - "fuck"
       - "shit"
@@ -63,6 +72,7 @@ FILTER:
     ENABLED: true
     PUNISHMENT_ENABLED: true
     PUNISHMENT_STACK: "FOUL_LANGUAGE"
+    PUNISHMENT_SILENT: true
     SERVER_WORD: "server"
     NEGATIVE_WORDS:
       - "trash"
@@ -74,6 +84,7 @@ FILTER:
     ENABLED: true
     PUNISHMENT_ENABLED: true
     PUNISHMENT_STACK: "ADVERTISING"
+    PUNISHMENT_SILENT: true
     WHITELISTED_LINKS:
       - "youtube.com"
       - "youtu.be"
@@ -84,9 +95,9 @@ FILTER:
 MESSAGES:
   NO_PERMISSION: "&cNo Permission!"
   SILENT_PREFIX: "&7[Silent] "
-  BROADCAST: "%silentPrefix%&a%target% was %type% by %issuer%."
+  BROADCAST: "&a%target% was %type% by %issuer%."
   PUNISHMENT:
-    SUCCESS: "&aYou have %type% %target% for: %reason%."
+    SUCCESS: "&aYou have %type% %target% for: &f%reason%."
     HOVER:
       - "&f&l * &c&l%type% %silentPrefix%"
       - "&cVictim: &f%victimName%"
@@ -94,7 +105,7 @@ MESSAGES:
       - "&cReason: &f%reason%"
     HOVER_TEMP: "&cExpires: &f%expiry%"
   UNPUNISHMENT:
-    SUCCESS: "&aYou have un%type% %target% for: %reason%."
+    SUCCESS: "&aYou have un%type% %target% for: &f%reason%."
     HOVER:
       - "&f&l * &c&l%type% %silentPrefix%"
       - "&cVictim: &f%victimName%"
@@ -206,10 +217,10 @@ MENUS:
     ACTIVE_NAME: "&6&l%uuid%"
     INACTIVE_NAME: "&6%uuid%"
     MATERIALS:
-      BLACKLIST: "IRON_FENCE"
-      BAN: "LADDER"
-      MUTE: "ACTIVATOR_RAIL"
-      KICK: "VINE"
+      BLACKLIST: "REDSTONE_BLOCK"
+      BAN: "IRON_SWORD"
+      MUTE: "BOOK_AND_QUILL"
+      KICK: "HOPPER"
       WARN: "PAPER"
     PARDONED:
       LORE:
