@@ -1,5 +1,5 @@
 name: PunishmentsX
-description: A GUI based punishments plugin (https://github.com/Cowings/PunishU).
+description: A GUI based punishments plugin (https://github.com/Cowings/PunishmentsX).
 version: ${punishu.desc}
 author: Cowings
 main: io.github.punishmentsx.PunishmentsX
