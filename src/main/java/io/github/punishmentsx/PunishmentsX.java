@@ -3,6 +3,7 @@ package io.github.punishmentsx;
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.commands.impl.*;
 import io.github.punishmentsx.database.mongo.Mongo;
+import io.github.punishmentsx.database.mysql.SQL;
 import io.github.punishmentsx.database.redis.PunishRedisMessageListener;
 import io.github.punishmentsx.database.redis.RedisPublisher;
 import io.github.punishmentsx.database.redis.RedisSubscriber;
@@ -26,7 +27,10 @@ import java.util.logging.Level;
 public class PunishmentsX extends JavaPlugin {
     private CommandMap commandMap;
 
+    public boolean usingMongo;
+
     @Getter private Mongo mongo;
+    @Getter private SQL sql;
 
     @Getter private RedisPublisher redisPublisher;
     @Getter private RedisSubscriber redisSubscriber;
@@ -44,14 +48,26 @@ public class PunishmentsX extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
 
-        // Mongo
-        if (getConfig().getString("DATABASE.USE").equals("mongo")) {
-            this.mongo = new Mongo(this);
-        } else if (getConfig().getString("DATABASE.USE").equals("mysql")) {
-            //do something
-        } else {
-            getLogger().log(Level.SEVERE, "YOU MUST SELECT EITHER  ");
-            onDisable();
+        // Database switching
+        switch (getConfig().getString("DATABASE.USE")) {
+            case "mongo":
+                this.mongo = new Mongo(this);
+                usingMongo = true;
+                break;
+            case "mysql":
+                this.sql = new SQL(this, false);
+                sql.openDatabaseConnection();
+                usingMongo = false;
+                break;
+            case "sqlite":
+                this.sql = new SQL(this, true);
+                sql.openDatabaseConnection();
+                usingMongo = false;
+                break;
+            default:
+                getLogger().log(Level.SEVERE, "YOU MUST SELECT EITHER MONGO, MYSQL, OR SQLITE IN THE CONFIG!");
+                onDisable();
+                break;
         }
 
         // Redis
@@ -104,6 +120,12 @@ public class PunishmentsX extends JavaPlugin {
 
         if (getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
             punishRedisMessageListener.close();
+        }
+
+        if (getConfig().getString("DATABASE.USE").equals("mysql")) {
+            sql.closeConnection();
+        } else if (getConfig().getString("DATABASE.USE").equals("sqlite")) {
+            sql.closeConnection();
         }
 
         this.saveConfig();

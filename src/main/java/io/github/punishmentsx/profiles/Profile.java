@@ -1,7 +1,5 @@
 package io.github.punishmentsx.profiles;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.punishments.Punishment;
 import lombok.Data;
@@ -9,6 +7,8 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 public @Data class Profile {
@@ -69,11 +69,6 @@ public @Data class Profile {
         return Bukkit.getPlayer(uuid);
     }
 
-    public String serialize() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        return gson.toJson(this);
-    }
-
     public void addIp(String ip) {
         this.currentIp = ip;
         if(!ipHistory.contains(ip)) {
@@ -94,21 +89,50 @@ public @Data class Profile {
     }
 
     public void importFromDocument(Document d) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-
         setName(d.getString("name"));
         setCurrentIp(d.getString("current_ip"));
         setIpHistory(d.getList("ip_history", String.class));
         setPunishments(d.getList("punishments", UUID.class));
     }
 
+    public void importSQL(String name, String currentIp, List<String> ipHistory, List<UUID> punishments) {
+        setName(name);
+        setCurrentIp(currentIp);
+        setIpHistory(ipHistory);
+        if (punishments == null) {
+            setPunishments(new ArrayList<>());
+        } else {
+            setPunishments(punishments);
+        }
+    }
+
     public Map<String, Object> export() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("current_ip", currentIp);
         map.put("ip_history", ipHistory);
         map.put("punishments", punishments);
         return map;
+    }
+
+    public void exportSQL() {
+        List<String> punishments2 = new ArrayList<>();
+        for (UUID uuid : punishments) {
+            punishments2.add(uuid.toString());
+        }
+
+        String ipHistoryString = String.join(",", ipHistory);
+        String punishmentsString = punishments.isEmpty() ? null : String.join(",", punishments2);
+        try {
+            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("INSERT OR REPLACE INTO profiles(id, ip_history, punishments, name, current_ip) VALUES (?,?,?,?,?)");
+            ps.setString(1, getUuid().toString());
+            ps.setString(2, ipHistoryString);
+            ps.setString(3, punishmentsString);
+            ps.setString(4, getName());
+            ps.setString(5, getCurrentIp());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -10,10 +10,10 @@ import io.github.punishmentsx.database.redis.RedisMessage;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class ProfileManager {
 
@@ -33,27 +33,35 @@ public class ProfileManager {
     }
 
     public Profile find(UUID uuid, boolean store) {
-        final Profile[] profile = {profiles.get(uuid)};
-        if(profile[0] == null) {
-            pull(false, uuid, store, mdr -> {
-                if(mdr instanceof Profile) {
-                    profile[0] = (Profile) mdr;
-                }
-            });
+        if (plugin.usingMongo) {
+            Profile[] profile = {profiles.get(uuid)};
+            if(profile[0] == null) {
+                pull(false, uuid, store, mdr -> {
+                    if(mdr instanceof Profile) {
+                        profile[0] = (Profile) mdr;
+                    }
+                });
+            }
+            return profile[0];
+        } else {
+            return pullSQL(uuid, store);
         }
-        return profile[0];
     }
 
     public Profile find(String name, boolean store) {
-        Profile[] profile = {null};
+        if (plugin.usingMongo) {
+            Profile[] profile = {null};
 
-        pull(false, name, store, mdr -> {
-            if(mdr instanceof Profile) {
-                profile[0] = (Profile) mdr;
-            }
-        });
+            pull(false, name, store, mdr -> {
+                if (mdr instanceof Profile) {
+                    profile[0] = (Profile) mdr;
+                }
+            });
 
-        return profile[0];
+            return profile[0];
+        } else {
+            return pullSQL(name, store);
+        }
     }
 
     public Profile get(UUID uuid) {
@@ -101,10 +109,86 @@ public class ProfileManager {
         });
     }
 
+    public Profile pullSQL(String name, boolean store) {
+        try {
+            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM profiles WHERE name = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                UUID uuid = UUID.fromString(rs.getString("id"));
+                String currentIp = rs.getString("current_ip");
+
+                Profile profile = new Profile(plugin, uuid);
+                List<String> ipHistory = Arrays.asList(rs.getString("ip_history").split("\\s*,\\s*"));
+                List<String> punishmentsStrings = Arrays.asList(rs.getString("punishments").split("\\s*,\\s*"));
+
+                List<UUID> punishments = new ArrayList<>();
+                for (String string : punishmentsStrings) {
+                    punishments.add(UUID.fromString(string));
+                }
+
+                profile.importSQL(name, currentIp, ipHistory, punishments);
+
+                if(store) {
+                    profiles.put(profile.getUuid(), profile);
+                }
+
+                return profile;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Profile pullSQL(UUID uuid, boolean store) {
+        try {
+            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM profiles WHERE id = ?");
+            ps.setString(1, uuid.toString());
+            ResultSet rs = ps.executeQuery();
+
+            List<UUID> punishments = new ArrayList<>();
+            String punishmentsString = rs.getString("punishments");
+            if (punishmentsString != null) {
+                List<String> punishmentsStrings = Arrays.asList(punishmentsString.split("\\s*,\\s*"));
+                for (String string : punishmentsStrings) {
+                    punishments.add(UUID.fromString(string));
+                }
+            } else {
+                punishments = null;
+            }
+
+            String ipHistoryString = rs.getString("ip_history");
+            List<String> ipHistory = null;
+            if (ipHistoryString != null) {
+                ipHistory = Arrays.asList(ipHistoryString.split("\\s*,\\s*"));
+            }
+
+            String name = rs.getString("name");
+            String currentIp = rs.getString("current_ip");
+
+            Profile profile = new Profile(plugin, uuid);
+
+            profile.importSQL(name, currentIp, ipHistory, punishments);
+
+            if(store) {
+                profiles.put(profile.getUuid(), profile);
+            }
+
+            return profile;
+        } catch (SQLException ignored) {
+        }
+        return null;
+    }
+
     public void push(boolean async, Profile profile, boolean unload) {
-        MongoUpdate mu = new MongoUpdate("profiles", profile.getUuid());
-        mu.setUpdate(profile.export());
-        plugin.getMongo().massUpdate(async, mu);
+        if (!plugin.usingMongo) {
+            profile.exportSQL();
+        } else {
+            MongoUpdate mu = new MongoUpdate("profiles", profile.getUuid());
+            mu.setUpdate(profile.export());
+            plugin.getMongo().massUpdate(async, mu);
+        }
 
         if (plugin.getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
             JsonObject json = new JsonObject();
@@ -117,12 +201,6 @@ public class ProfileManager {
 
         if(unload) {
             profiles.remove(profile.getUuid());
-        }
-    }
-
-    public void update() {
-        for(Profile profile : profiles.values()) {
-            profile.update();
         }
     }
 

@@ -9,12 +9,12 @@ DATABASE:
   #Recommend using MongoDB rather than MySQL (Required for storing data).
   #Redis is required for cross server synchronization.
 
-  # You can use either "mongo" or "mysql" (Must use 1 of them)
-  USE: "mongo"
+  # You can use either "mongo", "sqlite", or "mysql" (Must use 1 of them)
+  USE: "sqlite"
 
   # MongoDB Fields - only applied if 'USE' option is set to "mongo"
   MONGO:
-    LOCALHOST_NO_AUTH: true # Only use this if you know what it is, this will replace URI if enabled.
+    LOCALHOST_NO_AUTH: false # Only use this if you know what it is, this will replace URI if enabled.
     URI: "mongodb://user:pass@127.0.0.1/punishments"
     DB: "punishments"
 
