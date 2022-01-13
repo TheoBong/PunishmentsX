@@ -4,4 +4,3 @@ Development just started - unfinished.
 
 # Todo
 - Anti ban evasion
-- Add support for MySQL
