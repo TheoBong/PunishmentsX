@@ -244,6 +244,8 @@ public @Data class Punishment {
 
             String pardonerString = pardoner == null ? null : pardoner.toString();
 
+            UUID issuer2 = issuer == null ? null : issuer;
+
             PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("INSERT OR REPLACE INTO punishments(id, pardoner, stack, expires, issue_reason, silent_pardon, victim, silent_issue, pardon_reason, issued, pardoned, type, issuer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, getUuid().toString());
             ps.setString(2, pardonerString);
@@ -257,7 +259,7 @@ public @Data class Punishment {
             ps.setDate(10, issuedSQL);
             ps.setDate(11, pardonedSQL);
             ps.setString(12, type.toString());
-            ps.setString(13, issuer.toString());
+            ps.setString(13, issuer == null ? null : issuer.toString());
 
             ps.executeUpdate();
         } catch (SQLException e) {
