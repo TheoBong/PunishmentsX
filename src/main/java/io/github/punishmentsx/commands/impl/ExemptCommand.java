@@ -45,8 +45,8 @@ public class ExemptCommand extends BaseCommand {
 
             UUID uuid = targetProfile.getUuid();
 
-            EvasionCheck evasionCheck = new EvasionCheck(uuid, targetProfile.getCurrentIp(), plugin, true);
-            String message = evasionCheck.getMessage();
+            EvasionCheck evasionCheck = new EvasionCheck(uuid, targetProfile.getCurrentIp(), plugin);
+            String message = evasionCheck.getWhy();
             UUID punishment = evasionCheck.getPunishment();
 
             if (message == null) {

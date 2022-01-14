@@ -41,8 +41,8 @@ public class WhyBannedCommand extends BaseCommand {
                 return;
             }
 
-            EvasionCheck evasionCheck = new EvasionCheck(targetProfile.getUuid(), targetProfile.getCurrentIp(), plugin, true);
-            String message = evasionCheck.getMessage();
+            EvasionCheck evasionCheck = new EvasionCheck(targetProfile.getUuid(), targetProfile.getCurrentIp(), plugin);
+            String message = evasionCheck.getWhy();
 
             if (message == null) {
                 sender.sendMessage("Target should be able to join!");

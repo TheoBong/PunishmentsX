@@ -13,15 +13,15 @@ import java.util.*;
 public @Data class EvasionCheck {
     
     private String message = null;
+    private String why = null;
     private UUID punishment = null;
     private boolean exempt = false;
-    private boolean why;
 
-    public EvasionCheck(UUID uuid, String ip, PunishmentsX plugin, boolean why) {
-        evading(uuid, ip, plugin, why);
+    public EvasionCheck(UUID uuid, String ip, PunishmentsX plugin) {
+        evading(uuid, ip, plugin);
     }
 
-    public void evading(UUID uuid, String ip, PunishmentsX plugin, boolean why) {
+    public void evading(UUID uuid, String ip, PunishmentsX plugin) {
         DocumentUtil documentUtil1 = new DocumentUtil(plugin, "iplog", "_id", ip);
         Document document1 = documentUtil1.getDocument();
 
@@ -92,28 +92,25 @@ public @Data class EvasionCheck {
 
                 String expiry = punishment.expiry();
 
-                if (why) {
-                    this.message = document2.getString("name") + " -> " + type + " : " + reason;
-                } else {
-                    List<String> list = new ArrayList<>();
+                this.why = document2.getString("name") + " -> " + type + " : " + reason;
 
-                    if (type.equals("BLACKLIST")) {
-                        for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
-                            list.add(string
-                                    .replace("%reason%", reason));
-                        }
-                        this.message = String.join("\n", list);
-                    } else if (type.equals("BAN")) {
-                        for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
-                            list.add(string
-                                    .replace("%expirationDate%", expiry)
-                                    .replace("%reason%", reason));
-                        }
-                        this.message = String.join("\n", list);
-                    } else {
-                        this.message = "Error - PunishmentsX";
+                List<String> list = new ArrayList<>();
+
+                if (type.equals("BLACKLIST")) {
+                    for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
+                        list.add(string
+                                .replace("%reason%", reason));
                     }
+                    this.message = String.join("\n", list);
+                } else if (type.equals("BAN")) {
+                    for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
+                        list.add(string
+                                .replace("%expirationDate%", expiry)
+                                .replace("%reason%", reason));
+                    }
+                    this.message = String.join("\n", list);
                 }
+
                 return;
             }
 
@@ -191,28 +188,25 @@ public @Data class EvasionCheck {
 
                         String expiry = punishment.expiry();
 
-                        if (why) {
-                            this.message = "[LongArms] " + document2.getString("name") + " -> " + ip1 + " -> " + document5.getString("name") + " -> " + type + " : " + reason;
-                        } else {
-                            List<String> list = new ArrayList<>();
+                        this.why = "[LongArms] " + document2.getString("name") + " -> " + ip1 + " -> " + document5.getString("name") + " -> " + type + " : " + reason;
 
-                            if (type.equals("BLACKLIST")) {
-                                for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
-                                    list.add(string
-                                            .replace("%reason%", reason));
-                                }
-                                this.message = String.join("\n", list);
-                            } else if (type.equals("BAN")) {
-                                for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
-                                    list.add(string
-                                            .replace("%expirationDate%", expiry)
-                                            .replace("%reason%", reason));
-                                }
-                                this.message = String.join("\n", list);
-                            } else {
-                                this.message = "Error - PunishmentsX";
+                        List<String> list = new ArrayList<>();
+
+                        if (type.equals("BLACKLIST")) {
+                            for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
+                                list.add(string
+                                        .replace("%reason%", reason));
                             }
+                            this.message = String.join("\n", list);
+                        } else if (type.equals("BAN")) {
+                            for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
+                                list.add(string
+                                        .replace("%expirationDate%", expiry)
+                                        .replace("%reason%", reason));
+                            }
+                            this.message = String.join("\n", list);
                         }
+
                         return;
                     }
                 }

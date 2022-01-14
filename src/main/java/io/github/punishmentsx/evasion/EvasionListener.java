@@ -46,7 +46,7 @@ public class EvasionListener implements Listener {
             }
         });
 
-        EvasionCheck evasionCheck = new EvasionCheck(uuid, ip, plugin, false);
+        EvasionCheck evasionCheck = new EvasionCheck(uuid, ip, plugin);
         String message = evasionCheck.getMessage();
 
         if (message != null) {
