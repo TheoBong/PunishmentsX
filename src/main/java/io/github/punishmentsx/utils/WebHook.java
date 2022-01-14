@@ -2,20 +2,35 @@ package io.github.punishmentsx.utils;
 
 import io.github.punishmentsx.PunishmentsX;
 import okhttp3.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.logging.Level;
+
 public class WebHook {
+    private static ConfigurationSection config;
 
     @SuppressWarnings("unchecked")
     public static void sendWebhook(PunishmentsX plugin, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
+        config = plugin.getConfig().getConfigurationSection("GENERAL.DISCORD_WEBHOOK");
+
+        if (!config.getBoolean("ENABLED")) {
+            return;
+        }
+
+        if (config.getString("LINK") == null || config.getString("LINK").isEmpty()) {
+            plugin.getLogger().log(Level.WARNING, "Your discord webhook link is invalid!");
+            return;
+        }
+
         ThreadUtil.runTask(true, plugin, () -> {
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("title", victimName + " has been " + type + "!");
             jsonObject.put("description", "A player has been " + type + " on your server!");
-            jsonObject.put("color", 15258703);
+            jsonObject.put("color", config.getString("COLOR"));
             JSONArray fields = new JSONArray();
 
             JSONObject field1 = new JSONObject();
@@ -52,12 +67,12 @@ public class WebHook {
             jsonObject.put("fields", fields);
 
             JSONObject footer = new JSONObject();
-            footer.put("text", "YourServer.com");
-            footer.put("icon_url", "https://cdn.discordapp.com/avatars/553044388540973105/2334d4f212566d16c069d00620d7e4cc.png?size=1024");
+            footer.put("text", config.getString("SERVER_DOMAIN"));
+            footer.put("icon_url", config.getString("SERVER_ICON"));
             jsonObject.put("footer", footer);
 
             jsonArray.add(jsonObject);
-            sendWebhook("Punishments", "https://i.pinimg.com/originals/fe/43/35/fe4335a9ced740248c304e8ad83cc8ea.jpg", "", jsonArray);
+            sendWebhook("Punishments", config.getString("AVATAR"), "", jsonArray);
         });
     }
 
@@ -73,15 +88,15 @@ public class WebHook {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
             Request request = new Request.Builder()
-                    .url("https://discord.com/api/webhooks/923027883067330620/ObC1mAQyRi0XpJgsTY4FVWkyljEwq0TmTOJ2kql25iyfdK1bfnzPZvKN_JqBSzNnAa-D")
+                    .url(config.getString("LINK"))
                     .post(body)
                     .build();
 
             Response response = client.newCall(request).execute();
             response.close();
         } catch (Exception e) {
+            System.out.println("PunishmentsX failed to send webhook! Please review config.");
             e.printStackTrace();
         }
-
     }
 }

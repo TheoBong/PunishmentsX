@@ -153,10 +153,10 @@ public @Data class Punishment {
                         .replace("%reason%", this.issueReason));
             }
             if (!type.equals(Type.KICK) && !type.equals(Type.WARN)) list.add(Locale.PUNISHMENT_HOVER_TEMP.format(plugin)
-                    .replace("%expiry%", this.expires == null ? "Never" : this.expires.toString()));
+                    .replace("%expiry%", expiry()));
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, type.toString(), victimName, issueReason, issuerName, null, this.expires == null ? "Never" : this.expires.toString());
+            WebHook.sendWebhook(plugin, type.toString(), victimName, issueReason, issuerName, null, expiry());
         } else {
             List<String> list = new ArrayList<>();
             for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
@@ -236,7 +236,8 @@ public @Data class Punishment {
 
     public void exportSQL() {
         try {
-            java.sql.Date expirySQL = new java.sql.Date(expires.getTime());
+            java.sql.Date expirySQL = null;
+            if (expires != null) expirySQL = new java.sql.Date(expires.getTime());
             java.sql.Date issuedSQL = new java.sql.Date(issued.getTime());
             java.sql.Date pardonedSQL = null;
             if (pardoned != null) pardonedSQL = new java.sql.Date(pardoned.getTime());

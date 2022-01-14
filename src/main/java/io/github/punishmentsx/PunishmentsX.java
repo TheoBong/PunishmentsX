@@ -7,6 +7,7 @@ import io.github.punishmentsx.database.mysql.SQL;
 import io.github.punishmentsx.database.redis.PunishRedisMessageListener;
 import io.github.punishmentsx.database.redis.RedisPublisher;
 import io.github.punishmentsx.database.redis.RedisSubscriber;
+import io.github.punishmentsx.evasion.EvasionListener;
 import io.github.punishmentsx.filter.Filter;
 import io.github.punishmentsx.listeners.ChatListener;
 import io.github.punishmentsx.listeners.JoinListener;
@@ -107,6 +108,18 @@ public class PunishmentsX extends JavaPlugin {
         registerCommand(new PunishCommand(this, "punish"));
         registerCommand(new TempPunishCommands(this, "temppunishments"));
         registerCommand(new UnpunishCommands(this, "unpunishments"));
+
+        if (getConfig().getBoolean("ANTI_EVASION.ENABLED")) {
+            if (getConfig().getString("DATABASE.USE").equals("mongo")) {
+                registerListener(new EvasionListener(this));
+                registerCommand(new WhyBannedCommand(this, "whybanned"));
+                registerCommand(new ExemptCommand(this, "exempt"));
+                registerCommand(new UnexemptCommand(this, "unexempt"));
+            } else {
+                getLogger().log(Level.WARNING, "PunishmentsX did not enable anti evasion because it requires MongoDB!");
+                getLogger().log(Level.WARNING, "Anti evasion will support MySQL and SQLite in a newer update!");
+            }
+        }
 
         if (getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
             this.punishRedisMessageListener = new PunishRedisMessageListener(this);

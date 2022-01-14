@@ -1,5 +1,6 @@
 package io.github.punishmentsx.listeners;
 
+import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
@@ -11,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class JoinListener implements Listener {
@@ -24,11 +27,12 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
+        Profile profile;
 
         if (plugin.getProfileManager().getProfiles().containsKey(uuid)) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Your profile is already loaded, please relog!");
 
-            Profile profile = plugin.getProfileManager().get(uuid);
+            profile = plugin.getProfileManager().get(uuid);
 
             if (profile == null) {
                 plugin.getProfileManager().getProfiles().remove(uuid);
@@ -36,23 +40,33 @@ public class JoinListener implements Listener {
                 plugin.getProfileManager().push(false, profile, true);
             }
         } else {
-            Profile profile = plugin.getProfileManager().find(uuid, true);
+            profile = plugin.getProfileManager().find(uuid, true);
             if (profile == null) {
                 profile = plugin.getProfileManager().createProfile(uuid);
             }
 
             Punishment blacklist = profile.getActivePunishment(Punishment.Type.BLACKLIST);
             Punishment ban = profile.getActivePunishment(Punishment.Type.BAN);
+
+            List<String> list = new ArrayList<>();
             if (blacklist != null) {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        Colors.get("&4You are blacklisted!\n&fReason: " + blacklist.getIssueReason()));
+                for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
+                    list.add(string.replace("%reason%", blacklist.getIssueReason()));
+                }
+
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, String.join("\n", list));
                 profile.addIp(event.getAddress().getHostAddress());
                 plugin.getProfileManager().push(true, profile, true);
             }
 
             if (ban != null) {
-                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        Colors.get("&cYou are banned (Expiry: " + ban.expiry() + ")!\n&fReason: " + ban.getIssueReason()));
+                for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
+                    list.add(string
+                            .replace("%expirationDate%", ban.expiry())
+                            .replace("%reason%", ban.getIssueReason()));
+                }
+
+                event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, String.join("\n", list));
                 profile.addIp(event.getAddress().getHostAddress());
                 plugin.getProfileManager().push(true, profile, true);
             }

@@ -71,7 +71,7 @@ public class ProfileManager {
     public void pull(boolean async, String name, boolean store, MongoDeserializedResult mdr) {
         plugin.getMongo().getDocument(false, "profiles", "name", name, document -> {
             if(document != null) {
-                UUID uuid = UUID.fromString(document.getString("_id"));
+                UUID uuid = (UUID) document.get("_id");
                 Profile profile = new Profile(plugin, uuid);
                 profile.importFromDocument(document);
 
@@ -135,9 +135,7 @@ public class ProfileManager {
 
                 return profile;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException ignored) {}
         return null;
     }
 
@@ -176,8 +174,7 @@ public class ProfileManager {
             }
 
             return profile;
-        } catch (SQLException ignored) {
-        }
+        } catch (SQLException ignored) {}
         return null;
     }
 

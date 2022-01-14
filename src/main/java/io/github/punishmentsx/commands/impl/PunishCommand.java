@@ -57,6 +57,7 @@ public class PunishCommand extends BaseCommand {
 
                 if (targetProfile == null) {
                     sender.sendMessage("Player has never logged on the server!");
+                    sender.sendMessage("Names are case-sensitive for offline players!");
                     return;
                 }
 

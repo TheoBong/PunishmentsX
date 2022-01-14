@@ -1,12 +1,12 @@
 package io.github.punishmentsx.listeners;
 
+import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
 import io.github.punishmentsx.utils.Stackables;
 import io.github.punishmentsx.utils.TranslatePunishment;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -35,9 +35,15 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = plugin.getProfileManager().get(player.getUniqueId());
 
-        if(profile.getActivePunishment(Punishment.Type.MUTE) != null) {
+        Punishment mute = profile.getActivePunishment(Punishment.Type.MUTE);
+        if(mute != null) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You cannot chat as you are muted.");
+
+            for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
+                player.sendMessage(string
+                        .replace("%expirationDate%", mute.expiry())
+                        .replace("%reason%", mute.getIssueReason()));
+            }
             return;
         }
 

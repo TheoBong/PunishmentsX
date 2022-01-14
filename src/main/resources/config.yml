@@ -37,10 +37,46 @@ DATABASE:
 GENERAL:
   SERVER_NAME: "Unspecified" # Example: lobby, kitpvp, factions, etc
   CONSOLE_NAME: "CONSOLE"
+
+  # Webhooks notify to a channel whenever a punishment/unpunishment is executed on the server.
   DISCORD_WEBHOOK:
+    ENABLED: false
+
+    # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+    # Read that to figure out how to use discord webhooks.
     LINK: ""
+
+    # Webhook's profile picture
+    AVATAR: "https://i.pinimg.com/originals/fe/43/35/fe4335a9ced740248c304e8ad83cc8ea.jpg"
+
+    # These are both used for the footer of the notification
+    SERVER_ICON: "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"
+    SERVER_DOMAIN: "YourServer.com"
+
+    # https://www.mathsisfun.com/hexadecimal-decimal-colors.html
+    # Find color you like in the color mixer, then copy the decimal number (IE: 3093151)
     COLOR: 15258703
 
+# Anti-Evasion detailed explanation:
+#
+# Plugin creates an "ip-list" for every player that lists all the IPs they log in with.
+# Plugin creates an "ip-profile" that for every IP address that lists all players that have logged on with that IP.
+#
+# When player logs in, it will go to the "ip-list" and check each IP's "ip-profile".
+# For each "ip-profile" it will check the accounts associated with the "ip-profile"
+# If any of those accounts have an active ban/blacklist, the plugin will know the player is ban evading.
+#
+# Long-Arms explanation:
+#
+# After initial checks, it will check each account's "ip-list".
+# It will get the "ip-profile" of each IP in the "ip-list" and run all the aforementioned checks.
+# If it finds any active bans/blacklists on one of these accounts, the plugin will know the player is ban evading.
+#
+# Long-arms is stable and working, but is not recommended because 90% of evaders get caught by first check.
+#
+ANTI_EVASION:
+  ENABLED: false
+  LONG_ARMS: false
 
 # Advanced chat filter built into the plugin
 FILTER:
