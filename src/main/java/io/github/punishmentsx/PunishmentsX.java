@@ -140,8 +140,6 @@ public class PunishmentsX extends JavaPlugin {
         } else if (getConfig().getString("DATABASE.USE").equals("sqlite")) {
             sql.closeConnection();
         }
-
-        this.saveConfig();
     }
 
     public void registerCommand(BaseCommand command) {
