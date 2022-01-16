@@ -30,7 +30,7 @@ public class HistoryCommand extends BaseCommand {
 
         if (sender instanceof Player) {
             if (args.length != 1) {
-                sender.sendMessage(ChatColor.RED + "Usage: /c <player>");
+                sender.sendMessage(ChatColor.RED + "Usage: /history <player>");
                 return;
             }
 

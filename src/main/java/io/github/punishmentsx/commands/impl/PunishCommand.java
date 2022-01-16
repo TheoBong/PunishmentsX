@@ -34,7 +34,7 @@ public class PunishCommand extends BaseCommand {
 
         if(sender instanceof Player) {
             if (args.length < 1) {
-                sender.sendMessage(ChatColor.RED + "Usage: /punish <player> <notes>");
+                sender.sendMessage(ChatColor.RED + "Usage: /punish <player> [notes]");
                 return;
             }
 

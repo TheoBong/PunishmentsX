@@ -34,6 +34,7 @@ io\github\punishmentsx\database\redis\RedisAction.class
 io\github\punishmentsx\database\redis\PunishRedisMessageListener.class
 io\github\punishmentsx\evasion\EvasionCheck.class
 io\github\punishmentsx\database\redis\RedisPublisher.class
+io\github\punishmentsx\commands\impl\CmdPunishCommand.class
 io\github\punishmentsx\database\mongo\MongoDeserializedResult.class
 io\github\punishmentsx\database\mysql\SQL.class
 io\github\punishmentsx\menus\PunishMenu.class

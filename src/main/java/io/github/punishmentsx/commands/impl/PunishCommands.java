@@ -98,7 +98,7 @@ public class PunishCommands extends BaseCommand {
             }
 
         } else {
-            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <target> <reason>");
+            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <target> <reason> [-s]");
         }
     }
 }

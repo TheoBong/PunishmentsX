@@ -108,6 +108,7 @@ public class PunishmentsX extends JavaPlugin {
         registerCommand(new PunishCommand(this, "punish"));
         registerCommand(new TempPunishCommands(this, "temppunishments"));
         registerCommand(new UnpunishCommands(this, "unpunishments"));
+        registerCommand(new CmdPunishCommand(this, "cmdpunish"));
 
         if (getConfig().getBoolean("ANTI_EVASION.ENABLED")) {
             if (getConfig().getString("DATABASE.USE").equals("mongo")) {
