@@ -53,10 +53,6 @@ GENERAL:
     SERVER_ICON: "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"
     SERVER_DOMAIN: "YourServer.com"
 
-    # https://www.mathsisfun.com/hexadecimal-decimal-colors.html
-    # Find color you like in the color mixer, then copy the decimal number (IE: 3093151)
-    COLOR: 15258703
-
 # Anti-Evasion detailed explanation:
 #
 # Plugin creates an "ip-list" for every player that lists all the IPs they log in with.

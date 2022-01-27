@@ -1,19 +1,16 @@
 package io.github.punishmentsx.utils;
 
 import io.github.punishmentsx.PunishmentsX;
-import okhttp3.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
+import java.awt.*;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class WebHook {
-    private static ConfigurationSection config;
-
-    @SuppressWarnings("unchecked")
-    public static void sendWebhook(PunishmentsX plugin, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
-        config = plugin.getConfig().getConfigurationSection("GENERAL.DISCORD_WEBHOOK");
+    public static void sendWebhook(PunishmentsX plugin, UUID punishmentUUID, String stack, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
+        ConfigurationSection config = plugin.getConfig().getConfigurationSection("GENERAL.DISCORD_WEBHOOK");
+        String server = plugin.getConfig().getString("GENERAL.SERVER_NAME");
 
         if (!config.getBoolean("ENABLED")) {
             return;
@@ -24,79 +21,45 @@ public class WebHook {
             return;
         }
 
-        ThreadUtil.runTask(true, plugin, () -> {
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObject = new JSONObject();
+        DiscordWebhook webhook = new DiscordWebhook(config.getString("LINK"));
+        webhook.setContent("");
+        webhook.setAvatarUrl(config.getString("AVATAR"));
+        webhook.setUsername("Punishments");
+        webhook.setTts(true);
 
-            jsonObject.put("title", victimName + " has been " + type + "!");
-            jsonObject.put("description", "A player has been " + type + " on your server!");
-            jsonObject.put("color", config.getString("COLOR"));
-            JSONArray fields = new JSONArray();
-
-            JSONObject field1 = new JSONObject();
-            field1.put("name", "Victim");
-            field1.put("value", victimName);
-            field1.put("inline", true);
-            fields.add(field1);
-
-            JSONObject field2 = new JSONObject();
-            field2.put("name", "Original Reason");
-            field2.put("value", issueReason);
-            fields.add(field2);
-
-            JSONObject field3 = new JSONObject();
-            field3.put("name", "Pardoner");
-            field3.put("value", issuerName);
-            field3.put("inline", true);
-            fields.add(field3);
-
-            if (pardonReason != null) {
-                JSONObject field4 = new JSONObject();
-                field4.put("name", "Pardon Reason");
-                field4.put("value", pardonReason);
-                fields.add(field4);
-            }
-
-            if (expiry != null) {
-                JSONObject field4 = new JSONObject();
-                field4.put("name", "Expires");
-                field4.put("value", expiry);
-                fields.add(field4);
-            }
-
-            jsonObject.put("fields", fields);
-
-            JSONObject footer = new JSONObject();
-            footer.put("text", config.getString("SERVER_DOMAIN"));
-            footer.put("icon_url", config.getString("SERVER_ICON"));
-            jsonObject.put("footer", footer);
-
-            jsonArray.add(jsonObject);
-            sendWebhook("Punishments", config.getString("AVATAR"), "", jsonArray);
-        });
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void sendWebhook(String username, String avatar_url, String content, JSONArray embeds) {
-        try {
-            JSONObject obj = new JSONObject();
-            obj.put("username", username);
-            obj.put("avatar_url", avatar_url);
-            obj.put("content", content);
-            obj.put("embeds", embeds);
-
-            OkHttpClient client = new OkHttpClient();
-            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
-            Request request = new Request.Builder()
-                    .url(config.getString("LINK"))
-                    .post(body)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            response.close();
-        } catch (Exception e) {
-            System.out.println("PunishmentsX failed to send webhook! Please review config.");
-            e.printStackTrace();
+        if (pardonReason == null) {
+            webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                    .setTitle(victimName + " has been " + type + "!")
+                    .setDescription("Punishment UUID: " + punishmentUUID)
+                    .setColor(Color.RED)
+                    .addField("Victim", victimName, true)
+                    .addField("Reason", issueReason, true)
+                    .addField("Issuer", issuerName, true)
+                    .addField("Expiry", expiry, true)
+                    .addField("Server", server, true)
+                    .addField("Stack", stack, true)
+                    .setFooter(config.getString("SERVER_DOMAIN"), "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"));
+        } else {
+            webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                    .setTitle(victimName + " has been " + type + "!")
+                    .setDescription("Punishment UUID: " + punishmentUUID)
+                    .setColor(Color.GREEN)
+                    .addField("Victim", victimName, true)
+                    .addField("Original Reason", issueReason, true)
+                    .addField("Pardoner", issuerName, true)
+                    .addField("Pardon Reason", pardonReason, true)
+                    .addField("Server", server, true)
+                    .addField("Stack", stack, true)
+                    .setFooter(config.getString("SERVER_DOMAIN"), "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"));
         }
+
+        ThreadUtil.runTask(true, plugin, () -> {
+            try {
+                webhook.execute();
+            } catch (Exception e) {
+                System.out.println("Discord Webhook Error! - PunishmentsX");
+                e.printStackTrace();
+            }
+        });
     }
 }

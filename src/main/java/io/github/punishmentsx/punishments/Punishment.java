@@ -156,7 +156,7 @@ public @Data class Punishment {
                     .replace("%expiry%", expiry()));
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, type.toString(), victimName, issueReason, issuerName, null, expiry());
+            WebHook.sendWebhook(plugin, uuid, stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
         } else {
             List<String> list = new ArrayList<>();
             for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
@@ -170,7 +170,7 @@ public @Data class Punishment {
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, "UN" + type.toString(), victimName, issueReason, issuerName, pardonReason, null);
+            WebHook.sendWebhook(plugin, uuid, stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
         }
 
         String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (this.isActive() ? (this.expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
