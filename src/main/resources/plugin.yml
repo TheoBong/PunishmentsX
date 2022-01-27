@@ -1,5 +1,9 @@
 name: PunishmentsX
-description: A GUI based punishments plugin (https://github.com/Cowings/PunishmentsX).
-version: ${punishu.desc}
+description: An extremely advanced punishments plugin (https://github.com/Cowings/PunishmentsX).
+version: ${punishmentsx.desc}
 author: Cowings
 main: io.github.punishmentsx.PunishmentsX
+libraries:
+  - org.mongodb:mongodb-driver-sync:4.4.1
+  - redis.clients:jedis:4.0.1
+  - com.squareup.okhttp3:okhttp:4.9.3

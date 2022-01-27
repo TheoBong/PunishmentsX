@@ -2,14 +2,14 @@
 # Config.yml - PunishmentsX
 # Made with love by Cowings.
 #
-# Unauthorized redistribution prohibited.
+# MIT License - https://github.com/Cowings/PunishmentsX/blob/main/LICENSE
 #
 
 DATABASE:
-  #Recommend using MongoDB rather than MySQL (Required for storing data).
+  #Recommend using MongoDB rather than MySQL/SQLite (Required for storing data).
   #Redis is required for cross server synchronization.
 
-  # You can use either "mongo", "sqlite", or "mysql" (Must use 1 of them)
+  # You can use either "mongo", "sqlite", or "mysql" (Must use 1 of them) - SQLite works without setup.
   USE: "sqlite"
 
   # MongoDB Fields - only applied if 'USE' option is set to "mongo"
@@ -165,9 +165,9 @@ MESSAGES:
     - "&fReason: %reason%"
 
 PERMISSIONS:
-  SILENT_VIEW: "punishments.view.silent" #See silent punishments in chat
+  SILENT_VIEW: "punishments.view.silent" #See silent punishments in chat & see hover of public punishments
   HISTORY: "punishments.history" #/history
-  PUNISH: "punishments.punish" #/punish
+  PUNISH: "punishments.punish" #/punish, /cmdpunish
   UNPUNISH: "punishments.unpunish" #/unban, /unmute
   MANUAL: "punishments.manual" #/ban, /mute, /warn, /kick, /tempban, /tempmute
 
