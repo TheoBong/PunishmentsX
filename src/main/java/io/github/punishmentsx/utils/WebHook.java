@@ -38,7 +38,7 @@ public class WebHook {
                     .addField("Expiry", expiry, true)
                     .addField("Server", server, true)
                     .addField("Stack", stack, true)
-                    .setFooter(config.getString("SERVER_DOMAIN"), "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"));
+                    .setFooter(config.getString("SERVER_DOMAIN"), config.getString("SERVER_ICON")));
         } else {
             webhook.addEmbed(new DiscordWebhook.EmbedObject()
                     .setTitle(victimName + " has been " + type + "!")
@@ -50,7 +50,7 @@ public class WebHook {
                     .addField("Pardon Reason", pardonReason, true)
                     .addField("Server", server, true)
                     .addField("Stack", stack, true)
-                    .setFooter(config.getString("SERVER_DOMAIN"), "https://img1.pnghut.com/7/17/8/squXjkt4pT/internet-media-type-texture-mapping-video-game-minecraft-pocket-edition-table.jpg"));
+                    .setFooter(config.getString("SERVER_DOMAIN"), config.getString("SERVER_ICON")));
         }
 
         ThreadUtil.runTask(true, plugin, () -> {
