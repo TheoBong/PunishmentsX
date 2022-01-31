@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class WebHook {
-    public static void sendWebhook(PunishmentsX plugin, UUID punishmentUUID, String stack, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
+    public static void sendWebhook(PunishmentsX plugin, UUID punishmentUUID, String duration, String stack, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("GENERAL.DISCORD_WEBHOOK");
         String server = plugin.getConfig().getString("GENERAL.SERVER_NAME");
 
@@ -29,7 +29,7 @@ public class WebHook {
 
         if (pardonReason == null) {
             webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setTitle(victimName + " has been " + type + "!")
+                    .setTitle(victimName + " has been " + type + " (" + duration + ")!")
                     .setDescription("Punishment UUID: " + punishmentUUID)
                     .setColor(Color.RED)
                     .addField("Victim", victimName, true)
@@ -41,7 +41,7 @@ public class WebHook {
                     .setFooter(config.getString("SERVER_DOMAIN"), config.getString("SERVER_ICON")));
         } else {
             webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setTitle(victimName + " has been " + type + "!")
+                    .setTitle(victimName + " has been " + type + " (" + duration + ")!")
                     .setDescription("Punishment UUID: " + punishmentUUID)
                     .setColor(Color.GREEN)
                     .addField("Victim", victimName, true)
@@ -57,7 +57,7 @@ public class WebHook {
             try {
                 webhook.execute();
             } catch (Exception e) {
-                System.out.println("Discord Webhook Error! - PunishmentsX");
+                plugin.getLogger().log(Level.WARNING, "Discord webhook is not working correctly! Contact author!");
                 e.printStackTrace();
             }
         });

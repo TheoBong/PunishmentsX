@@ -6,6 +6,7 @@ import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
 import io.github.punishmentsx.utils.Stackables;
+import io.github.punishmentsx.utils.TimeUtil;
 import io.github.punishmentsx.utils.TranslatePunishment;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,6 +43,7 @@ public class ChatListener implements Listener {
             for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
                 player.sendMessage(string
                         .replace("%expirationDate%", mute.expiry())
+                        .replace("%expiry%", mute.duration())
                         .replace("%reason%", mute.getIssueReason()));
             }
             return;

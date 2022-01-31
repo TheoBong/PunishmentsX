@@ -120,6 +120,7 @@ public class HistoryMenu {
                 lore.add(Colors.get(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
+                        .replace("%duration%", punishment.duration())
                         .replace("%stack%", punishment.getStack())
                         .replace("%active%", punishment.isActive() + "")
                         .replace("%issuedDate%", punishment.getIssued().toString())
@@ -138,6 +139,7 @@ public class HistoryMenu {
                 lore.add(Colors.get(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
+                        .replace("%duration%", punishment.duration())
                         .replace("%stack%", punishment.getStack())
                         .replace("%active%", punishment.isActive() + "")
                         .replace("%issuedDate%", punishment.getIssued().toString())

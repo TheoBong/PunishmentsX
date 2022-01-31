@@ -5,6 +5,7 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.mongo.MongoUpdate;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.DocumentUtil;
+import io.github.punishmentsx.utils.TimeUtil;
 import lombok.Data;
 import org.bson.Document;
 
@@ -28,7 +29,6 @@ public @Data class EvasionCheck {
         List<UUID> accounts;
 
         if (document1 == null) {
-            System.out.println("Document1 null");
             accounts = new ArrayList<>();
             accounts.add(uuid);
 
@@ -90,8 +90,6 @@ public @Data class EvasionCheck {
                 if (exempted) continue;
                 if (!isActive(type, expires, pardoned)) continue;
 
-                String expiry = punishment.expiry();
-
                 this.why = document2.getString("name") + " -> " + type + " : " + reason;
 
                 List<String> list = new ArrayList<>();
@@ -105,7 +103,8 @@ public @Data class EvasionCheck {
                 } else if (type.equals("BAN")) {
                     for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
                         list.add(string
-                                .replace("%expirationDate%", expiry)
+                                .replace("%expirationDate%", punishment.expiry())
+                                .replace("%expiry%", punishment.duration())
                                 .replace("%reason%", reason));
                     }
                     this.message = String.join("\n", list);
@@ -186,8 +185,6 @@ public @Data class EvasionCheck {
                         if (exempted) continue;
                         if (!isActive(type, expires, pardoned)) continue;
 
-                        String expiry = punishment.expiry();
-
                         this.why = "[LongArms] " + document2.getString("name") + " -> " + ip1 + " -> " + document5.getString("name") + " -> " + type + " : " + reason;
 
                         List<String> list = new ArrayList<>();
@@ -201,7 +198,8 @@ public @Data class EvasionCheck {
                         } else if (type.equals("BAN")) {
                             for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
                                 list.add(string
-                                        .replace("%expirationDate%", expiry)
+                                        .replace("%expirationDate%", punishment.expiry())
+                                        .replace("%expiry%", punishment.duration())
                                         .replace("%reason%", reason));
                             }
                             this.message = String.join("\n", list);

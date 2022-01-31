@@ -5,6 +5,7 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
+import io.github.punishmentsx.utils.TimeUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,6 +64,7 @@ public class JoinListener implements Listener {
                 for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
                     list.add(string
                             .replace("%expirationDate%", ban.expiry())
+                            .replace("%expiry%", ban.duration())
                             .replace("%reason%", ban.getIssueReason()));
                 }
 

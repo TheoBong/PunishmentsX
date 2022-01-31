@@ -5,6 +5,7 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.utils.Notifications;
 import io.github.punishmentsx.utils.PlayerUtil;
+import io.github.punishmentsx.utils.TimeUtil;
 import io.github.punishmentsx.utils.WebHook;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -52,6 +53,14 @@ public @Data class Punishment {
             return "Never";
         } else {
             return expires.toString();
+        }
+    }
+    
+    public String duration() {
+        if (expires == null) {
+            return "Permanent";
+        } else {
+            return TimeUtil.formatTimeMillis(expires.getTime());
         }
     }
 
@@ -102,6 +111,7 @@ public @Data class Punishment {
                         for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
                             list.add(string
                                     .replace("%expirationDate%", expiry())
+                                    .replace("%expiry%", duration())
                                     .replace("%reason%", issueReason));
                         }
                         player.kickPlayer(String.join("\n", list));
@@ -116,6 +126,7 @@ public @Data class Punishment {
                         for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
                             list.add(string
                                     .replace("%expirationDate%", expiry())
+                                    .replace("%expiry%", duration())
                                     .replace("%reason%", issueReason));
                         }
                         player.sendMessage(String.join("\n", list));
@@ -147,16 +158,16 @@ public @Data class Punishment {
             for (String string : Locale.PUNISHMENT_HOVER.formatLines(plugin)) {
                 list.add(string
                         .replace("%type%", StringUtils.capitalize(type.toString().toLowerCase()))
+                        .replace("%duration%", duration())
                         .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
                         .replace("%victimName%", victimName)
                         .replace("%issuerName%", issuerName)
-                        .replace("%reason%", this.issueReason));
+                        .replace("%expiry%", expiry())
+                        .replace("%reason%", issueReason));
             }
-            if (!type.equals(Type.KICK) && !type.equals(Type.WARN)) list.add(Locale.PUNISHMENT_HOVER_TEMP.format(plugin)
-                    .replace("%expiry%", expiry()));
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, uuid, stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
+            WebHook.sendWebhook(plugin, uuid, duration(), stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
         } else {
             List<String> list = new ArrayList<>();
             for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
@@ -164,16 +175,16 @@ public @Data class Punishment {
                         .replace("%type%", StringUtils.capitalize(type.toString().toLowerCase()))
                         .replace("%silentPrefix%", silentPardon ? Locale.SILENT_PREFIX.format(plugin) : "")
                         .replace("%victimName%", victimName)
-                        .replace("%reason%", this.issueReason)
+                        .replace("%reason%", issueReason)
                         .replace("%issuerName%", issuerName)
                         .replace("%pardonReason%", pardonReason));
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, uuid, stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
+            WebHook.sendWebhook(plugin, uuid, duration(), stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
         }
 
-        String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (this.isActive() ? (this.expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
+        String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (isActive() ? (expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
 
         String message = Locale.BROADCAST.format(plugin)
                 .replace("%target%", victimName)
@@ -243,8 +254,6 @@ public @Data class Punishment {
             if (pardoned != null) pardonedSQL = new java.sql.Date(pardoned.getTime());
 
             String pardonerString = pardoner == null ? null : pardoner.toString();
-
-            UUID issuer2 = issuer == null ? null : issuer;
 
             PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("INSERT OR REPLACE INTO punishments(id, pardoner, stack, expires, issue_reason, silent_pardon, victim, silent_issue, pardon_reason, issued, pardoned, type, issuer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, getUuid().toString());

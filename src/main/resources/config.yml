@@ -134,8 +134,9 @@ MESSAGES:
       - "&f&l * &c&l%type% %silentPrefix%"
       - "&cVictim: &f%victimName%"
       - "&cIssuer: &f%issuerName%"
+      - "&cDuration: &f%duration%"
       - "&cReason: &f%reason%"
-    HOVER_TEMP: "&cExpires: &f%expiry%"
+      - "&cExpires: &f%expiry%"
   UNPUNISHMENT:
     SUCCESS: "&aYou have un%type% %target% for: &f%reason%."
     HOVER:
@@ -148,14 +149,16 @@ MESSAGES:
     - "&4Your account has been blacklisted"
     - "&fReason: %reason%"
   BAN_MESSAGE:
-    - "&cYour account has been banned (Expiry: %expirationDate%)"
+    - "&cYour account has been banned"
+    - "&cExpires: %expires% (%expirationDate%)"
+    - ""
     - "&fReason: %reason%"
   WARN_MESSAGE:
     - "&cYou have been warned by a staff member!"
     - "&fReason: %reason%"
   MUTE_MESSAGE:
     - "&cYou have been muted for: &f%reason%."
-    - "&cExpiry: %expirationDate%"
+    - "&cExpires: %expires% (%expirationDate%)"
   KICK_MESSAGE:
     - "You have been kicked by a staff member!"
     - "&fReason: %reason%"
@@ -259,6 +262,7 @@ MENUS:
         - "&7&m-----------------------------"
         - "&eTarget: &f%victim%"
         - "&eType: &f%type%"
+        - "&eDuration: &f%duration%"
         - "&eStack: &f%stack%"
         - "&eActive: &f%active%"
         - "&7&m-----------------------------"
@@ -276,6 +280,7 @@ MENUS:
         - "&7&m-----------------------------"
         - "&eTarget: &f%victim%"
         - "&eType: &f%type%"
+        - "&eDuration: &f%duration%"
         - "&eStack: &f%stack%"
         - "&eActive: &f%active%"
         - "&7&m-----------------------------"
