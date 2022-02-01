@@ -60,7 +60,7 @@ public @Data class Punishment {
         if (expires == null) {
             return "Permanent";
         } else {
-            return TimeUtil.formatTimeMillis(expires.getTime());
+            return TimeUtil.formatTimeMillis(expires.getTime() - System.currentTimeMillis());
         }
     }
 
@@ -167,7 +167,7 @@ public @Data class Punishment {
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, uuid, duration(), stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
+            WebHook.sendWebhook(plugin, victim, uuid, duration(), stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
         } else {
             List<String> list = new ArrayList<>();
             for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
@@ -181,7 +181,7 @@ public @Data class Punishment {
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, uuid, duration(), stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
+            WebHook.sendWebhook(plugin, victim, uuid, duration(), stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
         }
 
         String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (isActive() ? (expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();

@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class WebHook {
-    public static void sendWebhook(PunishmentsX plugin, UUID punishmentUUID, String duration, String stack, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
+    public static void sendWebhook(PunishmentsX plugin, UUID victimUUID, UUID punishmentUUID, String duration, String stack, String type, String victimName, String issueReason, String issuerName, String pardonReason, String expiry) {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("GENERAL.DISCORD_WEBHOOK");
         String server = plugin.getConfig().getString("GENERAL.SERVER_NAME");
 
@@ -32,6 +32,7 @@ public class WebHook {
                     .setTitle(victimName + " has been " + type + " (" + duration + ")!")
                     .setDescription("Punishment UUID: " + punishmentUUID)
                     .setColor(Color.RED)
+                    .setThumbnail("https://www.mc-heads.net/head/" + victimUUID)
                     .addField("Victim", victimName, true)
                     .addField("Reason", issueReason, true)
                     .addField("Issuer", issuerName, true)
@@ -44,6 +45,7 @@ public class WebHook {
                     .setTitle(victimName + " has been " + type + " (" + duration + ")!")
                     .setDescription("Punishment UUID: " + punishmentUUID)
                     .setColor(Color.GREEN)
+                    .setThumbnail("https://www.mc-heads.net/head/" + victimUUID)
                     .addField("Victim", victimName, true)
                     .addField("Original Reason", issueReason, true)
                     .addField("Pardoner", issuerName, true)
