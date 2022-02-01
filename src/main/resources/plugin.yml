@@ -2,5 +2,4 @@ name: PunishmentsX
 description: An extremely advanced punishments plugin (https://github.com/Cowings/PunishmentsX).
 version: ${punishmentsx.desc}
 author: Cowings
-api-version: 1.8
 main: io.github.punishmentsx.PunishmentsX
