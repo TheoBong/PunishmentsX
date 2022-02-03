@@ -64,23 +64,7 @@ public class HistoryMenu {
     }
 
     private static Button createButton(PunishmentsX plugin, Punishment punishment) {
-        String uuid = punishment.getUuid().toString();
-
-        Button button;
-        switch (punishment.getType()) {
-            case BLACKLIST: button = new Button(Material.valueOf(Locale.HISTORY_BLACKLIST_MATERIAL.format(plugin)),
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-            case BAN: button = new Button(Material.valueOf(Locale.HISTORY_BAN_MATERIAL.format(plugin)),
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-            case MUTE: button = new Button(Material.valueOf(Locale.HISTORY_MUTE_MATERIAL.format(plugin)),
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-            case KICK: button = new Button(Material.valueOf(Locale.HISTORY_KICK_MATERIAL.format(plugin)),
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-            case WARN: button = new Button(Material.valueOf(Locale.HISTORY_WARN_MATERIAL.format(plugin)),
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-            default: button = new Button(Material.WOOD_SWORD,
-                    punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid)); break;
-        }
+        Button button = punishment.getType().getButton(plugin, punishment);
 
         if(punishment.isActive()) {
             button.getMeta().addEnchant(Enchantment.DURABILITY, 1, true);
@@ -117,7 +101,7 @@ public class HistoryMenu {
             ConfigurationSection section = plugin.getConfig().getConfigurationSection("MENUS.HISTORY.PARDONED");
             List<String> lore = new ArrayList<>();
             for (String string : section.getStringList("LORE")) {
-                lore.add(Colors.get(string
+                lore.add(Colors.convertLegacyColors(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
                         .replace("%duration%", punishment.duration())
@@ -136,7 +120,7 @@ public class HistoryMenu {
             ConfigurationSection section = plugin.getConfig().getConfigurationSection("MENUS.HISTORY.REGULAR");
             List<String> lore = new ArrayList<>();
             for (String string : section.getStringList("LORE")) {
-                lore.add(Colors.get(string
+                lore.add(Colors.convertLegacyColors(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
                         .replace("%duration%", punishment.duration())

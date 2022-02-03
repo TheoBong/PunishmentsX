@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
 
 public class ProfileManager {
 
@@ -114,28 +115,43 @@ public class ProfileManager {
             PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM profiles WHERE name = ?");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            if (rs != null) {
-                UUID uuid = UUID.fromString(rs.getString("id"));
-                String currentIp = rs.getString("current_ip");
 
-                Profile profile = new Profile(plugin, uuid);
-                List<String> ipHistory = Arrays.asList(rs.getString("ip_history").split("\\s*,\\s*"));
-                List<String> punishmentsStrings = Arrays.asList(rs.getString("punishments").split("\\s*,\\s*"));
-
-                List<UUID> punishments = new ArrayList<>();
-                for (String string : punishmentsStrings) {
-                    punishments.add(UUID.fromString(string));
+            if (!plugin.getSql().usingLite) {
+                rs.beforeFirst();
+                rs.next();
+            } else {
+                if (!rs.next()) {
+                    return null;
                 }
-
-                profile.importSQL(name, currentIp, ipHistory, punishments);
-
-                if(store) {
-                    profiles.put(profile.getUuid(), profile);
-                }
-
-                return profile;
             }
-        } catch (SQLException ignored) {}
+
+            UUID uuid = UUID.fromString(rs.getString("id"));
+            String currentIp = rs.getString("current_ip");
+
+
+            List<String> ipHistory = Arrays.asList(rs.getString("ip_history").split("\\s*,\\s*"));
+            List<String> punishmentsStrings = Arrays.asList(rs.getString("punishments").split("\\s*,\\s*"));
+
+            List<UUID> punishments = new ArrayList<>();
+            for (String string : punishmentsStrings) {
+                punishments.add(UUID.fromString(string));
+            }
+
+            Profile profile = new Profile(plugin, uuid);
+            profile.importSQL(name, currentIp, ipHistory, punishments);
+
+            for(UUID u : profile.getPunishments()) {
+                plugin.getPunishmentManager().pull(false, u, true, obj -> {});
+            }
+
+            if(store) {
+                profiles.put(profile.getUuid(), profile);
+            }
+
+            return profile;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -145,10 +161,19 @@ public class ProfileManager {
             ps.setString(1, uuid.toString());
             ResultSet rs = ps.executeQuery();
 
+            if (!plugin.getSql().usingLite) {
+                rs.beforeFirst();
+                rs.next();
+            } else {
+                if (!rs.next()) {
+                    return null;
+                }
+            }
+
             List<UUID> punishments = new ArrayList<>();
             String punishmentsString = rs.getString("punishments");
             if (punishmentsString != null) {
-                List<String> punishmentsStrings = Arrays.asList(punishmentsString.split("\\s*,\\s*"));
+                String[] punishmentsStrings = punishmentsString.split("\\s*,\\s*");
                 for (String string : punishmentsStrings) {
                     punishments.add(UUID.fromString(string));
                 }
@@ -166,15 +191,20 @@ public class ProfileManager {
             String currentIp = rs.getString("current_ip");
 
             Profile profile = new Profile(plugin, uuid);
-
             profile.importSQL(name, currentIp, ipHistory, punishments);
+
+            for(UUID u : profile.getPunishments()) {
+                plugin.getPunishmentManager().pull(false, u, true, obj -> {});
+            }
 
             if(store) {
                 profiles.put(profile.getUuid(), profile);
             }
 
             return profile;
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

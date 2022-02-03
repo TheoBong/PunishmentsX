@@ -12,6 +12,10 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class Filter {
+    public enum Reason {
+        ADVERTISING, NEGATIVE_WORD_PAIR, BLACKLISTED_WORD;
+    }
+
     private final Configuration config;
     private final boolean antiAdvertising;
     private final boolean blacklistedWords;
@@ -45,12 +49,12 @@ public class Filter {
         return config.getStringList("FILTER.ANTI_ADVERTISING.WHITELISTED_LINKS").toArray(new String[0]);
     }
 
-    public String isFiltered(String message) {
+    public Reason filteredMessage(String message) {
         message = message.toLowerCase().trim();
 
         if (antiAdvertising) {
             if (Arrays.stream(message.split(" ")).map(StringUtil.IP_REGEX::matcher).anyMatch(Matcher::matches)) {
-                return "Advertising";
+                return Reason.ADVERTISING;
             }
 
             String[] words = advanced ? message.replace("dot", ".").trim().split(" ") : message.trim().split(" ");
@@ -67,7 +71,7 @@ public class Filter {
                 }
 
                 if (filtered) {
-                    return "Advertising";
+                    return Reason.ADVERTISING;
                 }
             }
         }
@@ -101,7 +105,7 @@ public class Filter {
             for (NegativeWordPair pair : getNegativeWordPairs()) {
                 for (String match : pair.getMatches()) {
                     if (noPuncParsed.contains(pair.getWord()) && noPuncParsed.contains(match)) {
-                        return "NegativeWordPair";
+                        return Reason.NEGATIVE_WORD_PAIR;
                     }
                 }
             }
@@ -110,20 +114,20 @@ public class Filter {
         if (blacklistedWords) {
             for (String phrase : getBlacklistedWords()) {
                 if (parsed.contains(phrase)) {
-                    return "BlacklistedWord";
+                    return Reason.BLACKLISTED_WORD;
                 }
             }
 
             Optional<String> filterablePhrase = getBlacklistedWords().stream().map(phrase -> phrase.replaceAll(" ", "")).filter(parsed::contains).findFirst();
 
             if (filterablePhrase.isPresent()) {
-                return "BlacklistedWord";
+                return Reason.BLACKLISTED_WORD;
             }
 
             String[] split = parsed.trim().split(" ");
 
             if (Arrays.stream(split).anyMatch(getBlacklistedWords()::contains)) {
-                return "BlacklistedWord";
+                return Reason.BLACKLISTED_WORD;
             }
         }
 

@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class JoinListener implements Listener {
     private final PunishmentsX plugin;
@@ -43,6 +44,7 @@ public class JoinListener implements Listener {
         } else {
             profile = plugin.getProfileManager().find(uuid, true);
             if (profile == null) {
+                plugin.getLogger().log(Level.WARNING, "Created new profile!");
                 profile = plugin.getProfileManager().createProfile(uuid);
             }
 

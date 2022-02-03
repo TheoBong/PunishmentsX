@@ -11,11 +11,15 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import xyz.leuo.gooey.button.Button;
 
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 public @Data class Punishment {
 
@@ -36,6 +40,72 @@ public @Data class Punishment {
                     return "warned";
                 default:
                     return "null";
+            }
+        }
+
+        public Button getButton(PunishmentsX plugin, Punishment punishment) {
+            String uuid = punishment.getUuid().toString();
+            switch (this) {
+                case BLACKLIST:
+                    return new Button(Material.valueOf(Locale.HISTORY_BLACKLIST_MATERIAL.format(plugin)),
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+                case BAN:
+                    return new Button(Material.valueOf(Locale.HISTORY_BAN_MATERIAL.format(plugin)),
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+                case MUTE:
+                    return new Button(Material.valueOf(Locale.HISTORY_MUTE_MATERIAL.format(plugin)),
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+                case KICK:
+                    return new Button(Material.valueOf(Locale.HISTORY_KICK_MATERIAL.format(plugin)),
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+                case WARN:
+                    return new Button(Material.valueOf(Locale.HISTORY_WARN_MATERIAL.format(plugin)),
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+                default:
+                    return new Button(Material.WOOD_SWORD,
+                        punishment.isActive() ? Locale.HISTORY_ACTIVE_NAME.format(plugin).replace("%uuid%", uuid) : Locale.HISTORY_INACTIVE_NAME.format(plugin).replace("%uuid%", uuid));
+            }
+        }
+
+        public void action(PunishmentsX plugin, String expiry, String duration, String issueReason, Player player) {
+            List<String> list = new ArrayList<>();
+            switch (this) {
+                case BAN:
+                    for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
+                        list.add(string
+                                .replace("%expirationDate%", expiry)
+                                .replace("%expiry%", duration)
+                                .replace("%reason%", issueReason));
+                    }
+                    player.kickPlayer(String.join("\n", list));
+                    break;
+                case BLACKLIST:
+                    for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
+                        list.add(string.replace("%reason%", issueReason));
+                    }
+                    player.kickPlayer(String.join("\n", list));
+                    break;
+                case MUTE:
+                    for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
+                        list.add(string
+                                .replace("%expirationDate%", expiry)
+                                .replace("%expiry%", duration)
+                                .replace("%reason%", issueReason));
+                    }
+                    player.sendMessage(String.join("\n", list));
+                    break;
+                case KICK:
+                    for (String string : Locale.KICK_MESSAGE.formatLines(plugin)) {
+                        list.add(string.replace("%reason%", issueReason));
+                    }
+                    player.kickPlayer(String.join("\n", list));
+                    break;
+                case WARN:
+                    for (String string : Locale.WARN_MESSAGE.formatLines(plugin)) {
+                        list.add(string.replace("%reason%", issueReason));
+                    }
+                    player.sendMessage(String.join("\n", list));
+                    break;
             }
         }
     }
@@ -104,46 +174,8 @@ public @Data class Punishment {
 
         if(player != null && player.isOnline()) {
             victimName = player.getName();
-            List<String> list = new ArrayList<>();
             if(isActive()) {
-                switch (type) {
-                    case BAN:
-                        for (String string : Locale.BAN_MESSAGE.formatLines(plugin)) {
-                            list.add(string
-                                    .replace("%expirationDate%", expiry())
-                                    .replace("%expiry%", duration())
-                                    .replace("%reason%", issueReason));
-                        }
-                        player.kickPlayer(String.join("\n", list));
-                        break;
-                    case BLACKLIST:
-                        for (String string : Locale.BLACKLIST_MESSAGE.formatLines(plugin)) {
-                            list.add(string.replace("%reason%", issueReason));
-                        }
-                        player.kickPlayer(String.join("\n", list));
-                        break;
-                    case MUTE:
-                        for (String string : Locale.MUTE_MESSAGE.formatLines(plugin)) {
-                            list.add(string
-                                    .replace("%expirationDate%", expiry())
-                                    .replace("%expiry%", duration())
-                                    .replace("%reason%", issueReason));
-                        }
-                        player.sendMessage(String.join("\n", list));
-                        break;
-                    case KICK:
-                        for (String string : Locale.KICK_MESSAGE.formatLines(plugin)) {
-                            list.add(string.replace("%reason%", issueReason));
-                        }
-                        player.kickPlayer(String.join("\n", list));
-                        break;
-                    case WARN:
-                        for (String string : Locale.WARN_MESSAGE.formatLines(plugin)) {
-                            list.add(string.replace("%reason%", issueReason));
-                        }
-                        player.sendMessage(String.join("\n", list));
-                        break;
-                }
+                type.action(plugin, expiry(), duration(), issueReason, player);
             }
         } else {
             Profile victimProfile = PlayerUtil.findPlayer(plugin, victim);
@@ -255,7 +287,7 @@ public @Data class Punishment {
 
             String pardonerString = pardoner == null ? null : pardoner.toString();
 
-            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("INSERT OR REPLACE INTO punishments(id, pardoner, stack, expires, issue_reason, silent_pardon, victim, silent_issue, pardon_reason, issued, pardoned, type, issuer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("REPLACE INTO punishments(id, pardoner, stack, expires, issue_reason, silent_pardon, victim, silent_issue, pardon_reason, issued, pardoned, type, issuer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, getUuid().toString());
             ps.setString(2, pardonerString);
             ps.setString(3, stack);

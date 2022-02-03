@@ -2,11 +2,11 @@ package io.github.punishmentsx.listeners;
 
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
+import io.github.punishmentsx.filter.Filter;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
 import io.github.punishmentsx.utils.Stackables;
-import io.github.punishmentsx.utils.TimeUtil;
 import io.github.punishmentsx.utils.TranslatePunishment;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -53,12 +53,12 @@ public class ChatListener implements Listener {
             if (plugin.getConfig().getBoolean("FILTER.BLOCK_UNICODE")) {
                 if (Arrays.stream(event.getMessage().split("")).map(isInvalid::matcher).anyMatch(Matcher::matches)) {
                     event.setCancelled(true);
-                    player.sendMessage(Colors.get("&cYou may not use unicode characters in chat."));
+                    player.sendMessage(Colors.convertLegacyColors("&cYou may not use unicode characters in chat."));
                     return;
                 }
             }
 
-            String filteredReason = plugin.getFilter().isFiltered(event.getMessage());
+            Filter.Reason filteredReason = plugin.getFilter().filteredMessage(event.getMessage());
             Configuration config = plugin.getConfig();
             if (filteredReason == null) {
                 return;
@@ -76,7 +76,7 @@ public class ChatListener implements Listener {
             List<String> punishmentsList;
 
             switch (filteredReason) {
-                case "Advertising":
+                case ADVERTISING:
                     section = config.getConfigurationSection("FILTER.ANTI_ADVERTISING");
 
                     if (section.getBoolean("PUNISHMENT_ENABLED")) {
@@ -102,11 +102,11 @@ public class ChatListener implements Listener {
                         profile.punish(type, stackSection.getName(), null, reason, expiration, silent);
                     } else {
                         player.sendMessage("");
-                        player.sendMessage(Colors.get("&cYour message: \"" + event.getMessage() + "\" has been filtered for advertising. Attempting to bypass the filter will result in punishment."));
+                        player.sendMessage(Colors.convertLegacyColors("&cYour message: \"" + event.getMessage() + "\" has been filtered for advertising. Attempting to bypass the filter will result in punishment."));
                         player.sendMessage("");
                     }
                     break;
-                case "NegativeWordPair":
+                case NEGATIVE_WORD_PAIR:
                     section = config.getConfigurationSection("FILTER.NEGATIVE_WORD_PAIR");
 
                     if (section.getBoolean("PUNISHMENT_ENABLED")) {
@@ -132,11 +132,11 @@ public class ChatListener implements Listener {
                         profile.punish(type, stackSection.getName(), null, reason, expiration, silent);
                     } else {
                         player.sendMessage("");
-                        player.sendMessage(Colors.get("&cYour message: \"" + event.getMessage() + "\" has been filtered for server disrespect. Attempting to bypass the filter will result in punishment."));
+                        player.sendMessage(Colors.convertLegacyColors("&cYour message: \"" + event.getMessage() + "\" has been filtered for server disrespect. Attempting to bypass the filter will result in punishment."));
                         player.sendMessage("");
                     }
                     break;
-                case "BlacklistedWord":
+                case BLACKLISTED_WORD:
                     section = config.getConfigurationSection("FILTER.BLACKLISTED_WORDS");
 
                     if (section.getBoolean("PUNISHMENT_ENABLED")) {
@@ -162,7 +162,7 @@ public class ChatListener implements Listener {
                         profile.punish(type, stackSection.getName(), null, reason, expiration, silent);
                     } else {
                         player.sendMessage("");
-                        player.sendMessage(Colors.get("&cYour message: \"" + event.getMessage() + "\" has been filtered for foul language. Attempting to bypass the filter will result in punishment."));
+                        player.sendMessage(Colors.convertLegacyColors("&cYour message: \"" + event.getMessage() + "\" has been filtered for foul language. Attempting to bypass the filter will result in punishment."));
                         player.sendMessage("");
                     }
                     break;

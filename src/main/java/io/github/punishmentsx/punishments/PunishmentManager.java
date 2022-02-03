@@ -4,6 +4,7 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.mongo.MongoDeserializedResult;
 import io.github.punishmentsx.database.mongo.MongoUpdate;
 import io.github.punishmentsx.profiles.Profile;
+import lombok.NonNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -58,22 +59,34 @@ public class PunishmentManager {
                 PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM punishments WHERE id = ?");
                 ps.setString(1, uuid.toString());
                 ResultSet rs = ps.executeQuery();
-                if (!rs.isClosed()) {
-                    UUID victim = UUID.fromString(rs.getString("victim"));
-                    UUID issuer = UUID.fromString(rs.getString("issuer"));
-                    UUID pardoner = UUID.fromString(rs.getString("pardoner"));
-                    String stack = rs.getString("stack");
-                    String issueReason = rs.getString("issue_reason");
-                    String pardonReason = rs.getString("pardon_reason");
-                    Date issued = rs.getDate("issued");
-                    Date expires = rs.getDate("expires");
-                    Date pardoned = rs.getDate("pardoned");
-                    String type = rs.getString("type");
-                    boolean silentIssue = rs.getBoolean("silent_issue");
-                    boolean silentPardon = rs.getBoolean("silent_pardon");
 
-                    Punishment punishment = new Punishment(plugin, uuid);
-                    punishment.importSQL(victim, issuer, pardoner, stack, issueReason, pardonReason, issued, expires, pardoned, type, silentIssue, silentPardon);
+                if (!plugin.getSql().usingLite) {
+                    rs.beforeFirst();
+                    rs.next();
+                } else {
+                    if (!rs.next()) {
+                        return;
+                    }
+                }
+
+                UUID victim = UUID.fromString(rs.getString("victim"));
+                UUID issuer = UUID.fromString(rs.getString("issuer"));
+                UUID pardoner = rs.getString("pardoner") == null ? null : UUID.fromString(rs.getString("pardoner"));
+                String stack = rs.getString("stack");
+                String issueReason = rs.getString("issue_reason");
+                String pardonReason = rs.getString("pardon_reason");
+                Date issued = rs.getDate("issued");
+                Date expires = rs.getDate("expires");
+                Date pardoned = rs.getDate("pardoned");
+                String type = rs.getString("type");
+                boolean silentIssue = rs.getBoolean("silent_issue");
+                boolean silentPardon = rs.getBoolean("silent_pardon");
+
+                Punishment punishment = new Punishment(plugin, uuid);
+                punishment.importSQL(victim, issuer, pardoner, stack, issueReason, pardonReason, issued, expires, pardoned, type, silentIssue, silentPardon);
+
+                if (store) {
+                    punishments.put(punishment.getUuid(), punishment);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

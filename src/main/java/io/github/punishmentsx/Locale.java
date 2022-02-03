@@ -59,7 +59,7 @@ public enum Locale {
 		List<String> lines = new ArrayList<>();
 
 		for (String string : plugin.getConfig().getStringList(path)) {
-			lines.add(Colors.get(string));
+			lines.add(Colors.convertLegacyColors(string));
 		}
 
 		return lines;

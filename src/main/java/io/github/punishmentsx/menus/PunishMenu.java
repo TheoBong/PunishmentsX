@@ -102,7 +102,7 @@ public class PunishMenu {
 
         List<String> lore = new ArrayList<>();
         for (String string : section.getStringList("LORE")) {
-            lore.add(Colors.get(string.replace("%offenses%", offenses + "")));
+            lore.add(Colors.convertLegacyColors(string.replace("%offenses%", offenses + "")));
         }
 
         button.setLore(lore);
@@ -125,9 +125,9 @@ public class PunishMenu {
                 targetProfile.punish(type, section.getName(), issuer.getUniqueId(), reason, expiration, silent);
 
                 if (expiration != null) {
-                    issuer.sendMessage(Colors.get("&aYou have temporarily " + type.pastMessage() + " " + targetProfile.getName() + " for: " + reason + "."));
+                    issuer.sendMessage(Colors.convertLegacyColors("&aYou have temporarily " + type.pastMessage() + " " + targetProfile.getName() + " for: " + reason + "."));
                 } else {
-                    issuer.sendMessage(Colors.get("&aYou have " + type.pastMessage() + " " + targetProfile.getName() + " for:&f " + reason + "."));
+                    issuer.sendMessage(Colors.convertLegacyColors("&aYou have " + type.pastMessage() + " " + targetProfile.getName() + " for:&f " + reason + "."));
                 }
             } else {
                 issuer.sendMessage(ChatColor.RED + "The target you specified already has an active punishment of that type. You must unmute/unban that player first!");;

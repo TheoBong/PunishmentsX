@@ -45,9 +45,9 @@ public class SQL {
 
             Connection con = getConnection();
 
-            PreparedStatement stat = con.prepareStatement("CREATE TABLE IF NOT EXISTS punishments (id VARCHAR(36) PRIMARY KEY, pardoner VARCHAR(36), stack VARCHAR(36), expires DATE, issue_reason LONGTEXT, silent_pardon BOOLEAN, victim VARCHAR(36), silent_issue BOOLEAN, pardon_reason LONGTEXT, issued DATE, pardoned DATE, type VARCHAR(16), issuer VARCHAR(36));");
+            PreparedStatement stat = con.prepareStatement("CREATE TABLE IF NOT EXISTS punishments (id LONGTEXT PRIMARY KEY, pardoner LONGTEXT, stack LONGTEXT, expires DATE, issue_reason LONGTEXT, silent_pardon BOOLEAN, victim LONGTEXT, silent_issue BOOLEAN, pardon_reason LONGTEXT, issued DATE, pardoned DATE, type LONGTEXT, issuer LONGTEXT);");
             stat.execute();
-            PreparedStatement stat2 = con.prepareStatement("CREATE TABLE IF NOT EXISTS profiles (id VARCHAR(36) PRIMARY KEY, ip_history LONGTEXT, punishments LONGTEXT, name VARCHAR(36), current_ip VARCHAR(45));");
+            PreparedStatement stat2 = con.prepareStatement("CREATE TABLE IF NOT EXISTS profiles (id LONGTEXT PRIMARY KEY, ip_history LONGTEXT, punishments LONGTEXT, name LONGTEXT, current_ip LONGTEXT);");
             stat2.execute();
         } catch (SQLException localSQLException) {
             localSQLException.printStackTrace();
@@ -67,7 +67,9 @@ public class SQL {
             if ((connection == null) || (connection.isClosed())) {
                 openDatabaseConnection();
             }
-        } catch (SQLException ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return connection;
     }
 

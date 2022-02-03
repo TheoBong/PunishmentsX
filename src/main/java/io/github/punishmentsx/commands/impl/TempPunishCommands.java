@@ -131,7 +131,7 @@ public class TempPunishCommands extends BaseCommand {
 
                 if(b) {
                     targetProfile.punish(punishmentType, "MANUAL", issuer, sb.toString(), calendar.getTime(), silent);
-                    sender.sendMessage(Colors.get("&aYou have temporarily " + punishmentType.pastMessage() + " " + targetProfile.getName() + " for:&f " + sb.toString() + "."));
+                    sender.sendMessage(Colors.convertLegacyColors("&aYou have temporarily " + punishmentType.pastMessage() + " " + targetProfile.getName() + " for:&f " + sb.toString() + "."));
                 } else {
                     sender.sendMessage(ChatColor.RED + "You did not specify a valid timeframe.");
                 }

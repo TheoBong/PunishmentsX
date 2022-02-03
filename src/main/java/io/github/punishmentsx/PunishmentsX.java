@@ -49,7 +49,6 @@ public class PunishmentsX extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
 
-        // Database switching
         switch (getConfig().getString("DATABASE.USE")) {
             case "mongo":
                 this.mongo = new Mongo(this);
@@ -136,11 +135,7 @@ public class PunishmentsX extends JavaPlugin {
             punishRedisMessageListener.close();
         }
 
-        if (getConfig().getString("DATABASE.USE").equals("mysql")) {
-            sql.closeConnection();
-        } else if (getConfig().getString("DATABASE.USE").equals("sqlite")) {
-            sql.closeConnection();
-        }
+        if (sql != null) sql.closeConnection();
     }
 
     public void registerCommand(BaseCommand command) {

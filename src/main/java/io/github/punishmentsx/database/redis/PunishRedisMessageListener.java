@@ -54,11 +54,11 @@ public class PunishRedisMessageListener implements RedisMessageListener {
                     for (Profile profile : plugin.getProfileManager().getProfiles().values()) {
                         Player player = profile.getPlayer();
                         if (player != null && player.isOnline() && player.hasPermission(Locale.SILENT_PERMISSION.format(plugin))) {
-                            ClickableMessage message = new ClickableMessage(Colors.get(json.get("message").getAsString()))
-                                    .hover(Colors.get(json.get("hover").getAsString()));
+                            ClickableMessage message = new ClickableMessage(Colors.convertLegacyColors(json.get("message").getAsString()))
+                                    .hover(Colors.convertLegacyColors(json.get("hover").getAsString()));
                             message.sendToPlayer(player);
                         } else if (player != null) {
-                            player.sendMessage(Colors.get(json.get("message").getAsString()));
+                            player.sendMessage(Colors.convertLegacyColors(json.get("message").getAsString()));
                         }
                     }
                     break;
@@ -66,8 +66,8 @@ public class PunishRedisMessageListener implements RedisMessageListener {
                     for (Profile profile : plugin.getProfileManager().getProfiles().values()) {
                         Player player = profile.getPlayer();
                         if (player != null && player.isOnline() && player.hasPermission(Locale.SILENT_PERMISSION.format(plugin))) {
-                            ClickableMessage message = new ClickableMessage(Colors.get(json.get("message").getAsString()))
-                                    .hover(Colors.get(json.get("hover").getAsString()));
+                            ClickableMessage message = new ClickableMessage(Colors.convertLegacyColors(json.get("message").getAsString()))
+                                    .hover(Colors.convertLegacyColors(json.get("hover").getAsString()));
                             message.sendToPlayer(player);
                         }
                     }

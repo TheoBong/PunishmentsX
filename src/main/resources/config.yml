@@ -150,7 +150,7 @@ MESSAGES:
     - "&fReason: %reason%"
   BAN_MESSAGE:
     - "&cYour account has been banned"
-    - "&cExpires: %expires% (%expirationDate%)"
+    - "&cExpires: %expiry% (%expirationDate%)"
     - ""
     - "&fReason: %reason%"
   WARN_MESSAGE:
@@ -158,7 +158,7 @@ MESSAGES:
     - "&fReason: %reason%"
   MUTE_MESSAGE:
     - "&cYou have been muted for: &f%reason%."
-    - "&cExpires: %expires% (%expirationDate%)"
+    - "&cExpires: %expiry% (%expirationDate%)"
   KICK_MESSAGE:
     - "You have been kicked by a staff member!"
     - "&fReason: %reason%"

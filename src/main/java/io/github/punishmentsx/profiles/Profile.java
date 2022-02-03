@@ -124,7 +124,7 @@ public @Data class Profile {
         String ipHistoryString = String.join(",", ipHistory);
         String punishmentsString = punishments.isEmpty() ? null : String.join(",", punishments2);
         try {
-            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("INSERT OR REPLACE INTO profiles(id, ip_history, punishments, name, current_ip) VALUES (?,?,?,?,?)");
+            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("REPLACE INTO profiles(id, ip_history, punishments, name, current_ip) VALUES (?,?,?,?,?)");
             ps.setString(1, getUuid().toString());
             ps.setString(2, ipHistoryString);
             ps.setString(3, punishmentsString);

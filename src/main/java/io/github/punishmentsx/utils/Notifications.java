@@ -33,8 +33,8 @@ public class Notifications {
                 for (Profile profile : plugin.getProfileManager().getProfiles().values()) {
                     Player player = profile.getPlayer();
                     if (player != null && player.isOnline() && player.hasPermission(Locale.SILENT_PERMISSION.format(plugin))) {
-                        ClickableMessage clickableMessage = new ClickableMessage(Colors.get(Locale.SILENT_PREFIX.format(plugin) + message))
-                                .hover(Colors.get(hover));
+                        ClickableMessage clickableMessage = new ClickableMessage(Colors.convertLegacyColors(Locale.SILENT_PREFIX.format(plugin) + message))
+                                .hover(Colors.convertLegacyColors(hover));
                         clickableMessage.sendToPlayer(player);
                     }
                 }
@@ -42,11 +42,11 @@ public class Notifications {
                 for (Profile profile : plugin.getProfileManager().getProfiles().values()) {
                     Player player = profile.getPlayer();
                     if (player != null && player.isOnline() && player.hasPermission(Locale.SILENT_PERMISSION.format(plugin))) {
-                        ClickableMessage clickableMessage = new ClickableMessage(Colors.get(message))
-                                .hover(Colors.get(hover));
+                        ClickableMessage clickableMessage = new ClickableMessage(Colors.convertLegacyColors(message))
+                                .hover(Colors.convertLegacyColors(hover));
                         clickableMessage.sendToPlayer(player);
                     } else if (player != null) {
-                        player.sendMessage(Colors.get(message));
+                        player.sendMessage(Colors.convertLegacyColors(message));
                     }
                 }
             }
