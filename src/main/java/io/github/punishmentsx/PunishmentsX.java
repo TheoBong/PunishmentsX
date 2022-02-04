@@ -2,8 +2,9 @@ package io.github.punishmentsx;
 
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.commands.impl.*;
+import io.github.punishmentsx.database.Database;
 import io.github.punishmentsx.database.mongo.Mongo;
-import io.github.punishmentsx.database.mysql.SQL;
+import io.github.punishmentsx.database.sequel.SQL;
 import io.github.punishmentsx.database.redis.PunishRedisMessageListener;
 import io.github.punishmentsx.database.redis.RedisPublisher;
 import io.github.punishmentsx.database.redis.RedisSubscriber;
@@ -28,13 +29,10 @@ import java.util.logging.Level;
 public class PunishmentsX extends JavaPlugin {
     private CommandMap commandMap;
 
-    public boolean usingMongo;
-
-    @Getter private Mongo mongo;
-    @Getter private SQL sql;
-
     @Getter private RedisPublisher redisPublisher;
     @Getter private RedisSubscriber redisSubscriber;
+
+    @Deprecated @Getter private Mongo mongo;
 
     public Gooey gooey;
 
@@ -45,24 +43,22 @@ public class PunishmentsX extends JavaPlugin {
 
     private PunishRedisMessageListener punishRedisMessageListener;
 
+    @Getter private Database storage;
+
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
 
         switch (getConfig().getString("DATABASE.USE")) {
             case "mongo":
-                this.mongo = new Mongo(this);
-                usingMongo = true;
+                mongo = new Mongo(this);
+                storage = mongo;
                 break;
             case "mysql":
-                this.sql = new SQL(this, false);
-                sql.openDatabaseConnection();
-                usingMongo = false;
+                storage = new SQL(this, Database.Type.MySQL);
                 break;
             case "sqlite":
-                this.sql = new SQL(this, true);
-                sql.openDatabaseConnection();
-                usingMongo = false;
+                storage = new SQL(this, Database.Type.SQLite);
                 break;
             default:
                 getLogger().log(Level.SEVERE, "YOU MUST SELECT EITHER MONGO, MYSQL, OR SQLITE IN THE CONFIG!");
@@ -135,7 +131,7 @@ public class PunishmentsX extends JavaPlugin {
             punishRedisMessageListener.close();
         }
 
-        if (sql != null) sql.closeConnection();
+        storage.close();
     }
 
     public void registerCommand(BaseCommand command) {

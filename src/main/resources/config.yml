@@ -18,7 +18,7 @@ DATABASE:
     URI: "mongodb://user:pass@127.0.0.1/punishments"
     DB: "punishments"
 
-  # MySQL Fields - only applied if 'USE' option is set to "mysql"
+  # MySQL/MariaDB Fields - only applied if 'USE' option is set to "mysql"
   MYSQL:
     HOST: "127.0.0.1"
     PORT: 3306

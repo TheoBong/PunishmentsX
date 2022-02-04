@@ -26,29 +26,6 @@ public class PunishRedisMessageListener implements RedisMessageListener {
         if(redisMessage.getInternalChannel().equals(Locale.REDIS_CHANNEL.format(plugin))) {
             RedisAction action = RedisAction.valueOf(json.get("action").getAsString());
 
-            String fromServer = json.get("fromServer") == null ? null : json.get("fromServer").getAsString();
-
-            if(fromServer != null) {
-                boolean thisServer = fromServer.equals(Locale.SERVER_NAME.format(plugin));
-                if(!thisServer) {
-                    UUID uuid = UUID.fromString(json.get("uuid").getAsString());
-                    Player player = Bukkit.getPlayer(uuid);
-                    if (player != null && player.isOnline()) {
-                        plugin.getProfileManager().pull(true, uuid, true, obj -> {
-                        });
-                    } else {
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            Player p = Bukkit.getPlayer(uuid);
-                            if (p != null && p.isOnline()) {
-                                plugin.getProfileManager().pull(true, uuid, true, obj -> {
-                                });
-                            }
-                        }, 10);
-                    }
-                }
-                return;
-            }
-
             switch(action) {
                 case PUNISHMENT:
                     for (Profile profile : plugin.getProfileManager().getProfiles().values()) {

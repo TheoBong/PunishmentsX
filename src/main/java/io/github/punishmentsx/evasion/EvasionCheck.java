@@ -2,6 +2,7 @@ package io.github.punishmentsx.evasion;
 
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
+import io.github.punishmentsx.database.Database;
 import io.github.punishmentsx.database.mongo.MongoUpdate;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.DocumentUtil;

@@ -3,18 +3,13 @@ package io.github.punishmentsx.profiles;
 import com.google.gson.JsonObject;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
-import io.github.punishmentsx.database.mongo.MongoDeserializedResult;
-import io.github.punishmentsx.database.mongo.MongoUpdate;
+import io.github.punishmentsx.database.Database;
 import io.github.punishmentsx.database.redis.RedisAction;
 import io.github.punishmentsx.database.redis.RedisMessage;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
 
 public class ProfileManager {
 
@@ -34,34 +29,35 @@ public class ProfileManager {
     }
 
     public Profile find(UUID uuid, boolean store) {
-        if (plugin.usingMongo) {
+        if (plugin.getStorage().type() == Database.Type.MONGO) {
             Profile[] profile = {profiles.get(uuid)};
             if(profile[0] == null) {
-                pull(false, uuid, store, mdr -> {
+                plugin.getStorage().loadProfile(false, uuid, store, mdr -> {
                     if(mdr instanceof Profile) {
                         profile[0] = (Profile) mdr;
                     }
                 });
             }
+
             return profile[0];
         } else {
-            return pullSQL(uuid, store);
+            return plugin.getStorage().loadProfile(false, uuid, store, obj -> {});
         }
     }
 
     public Profile find(String name, boolean store) {
-        if (plugin.usingMongo) {
+        if (plugin.getStorage().type() == Database.Type.MONGO) {
             Profile[] profile = {null};
 
-            pull(false, name, store, mdr -> {
+            plugin.getStorage().loadProfile(false, name, store, mdr -> {
                 if (mdr instanceof Profile) {
                     profile[0] = (Profile) mdr;
                 }
-            });
+           });
 
             return profile[0];
         } else {
-            return pullSQL(name, store);
+            return plugin.getStorage().loadProfile(false, name, store, obj -> {});
         }
     }
 
@@ -69,153 +65,8 @@ public class ProfileManager {
         return profiles.get(uuid);
     }
 
-    public void pull(boolean async, String name, boolean store, MongoDeserializedResult mdr) {
-        plugin.getMongo().getDocument(false, "profiles", "name", name, document -> {
-            if(document != null) {
-                UUID uuid = (UUID) document.get("_id");
-                Profile profile = new Profile(plugin, uuid);
-                profile.importFromDocument(document);
-
-                for(UUID u : profile.getPunishments()) {
-                    plugin.getPunishmentManager().pull(false, u, true, obj -> {});
-                }
-
-                mdr.call(profile);
-                if(store) {
-                    profiles.put(profile.getUuid(), profile);
-                }
-            } else {
-                mdr.call(null);
-            }
-        });
-    }
-
-    public void pull(boolean async, UUID uuid, boolean store, MongoDeserializedResult mdr) {
-        plugin.getMongo().getDocument(async, "profiles", "_id", uuid, document -> {
-            if(document != null) {
-                Profile profile = new Profile(plugin, uuid);
-                profile.importFromDocument(document);
-
-                for(UUID u : profile.getPunishments()) {
-                    plugin.getPunishmentManager().pull(false, u, true, obj -> {});
-                }
-
-                mdr.call(profile);
-                if(store) {
-                    profiles.put(profile.getUuid(), profile);
-                }
-            } else {
-                mdr.call(null);
-            }
-        });
-    }
-
-    public Profile pullSQL(String name, boolean store) {
-        try {
-            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM profiles WHERE name = ?");
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-
-            if (!plugin.getSql().usingLite) {
-                rs.beforeFirst();
-                rs.next();
-            } else {
-                if (!rs.next()) {
-                    return null;
-                }
-            }
-
-            UUID uuid = UUID.fromString(rs.getString("id"));
-            String currentIp = rs.getString("current_ip");
-
-
-            List<String> ipHistory = Arrays.asList(rs.getString("ip_history").split("\\s*,\\s*"));
-            List<String> punishmentsStrings = Arrays.asList(rs.getString("punishments").split("\\s*,\\s*"));
-
-            List<UUID> punishments = new ArrayList<>();
-            for (String string : punishmentsStrings) {
-                punishments.add(UUID.fromString(string));
-            }
-
-            Profile profile = new Profile(plugin, uuid);
-            profile.importSQL(name, currentIp, ipHistory, punishments);
-
-            for(UUID u : profile.getPunishments()) {
-                plugin.getPunishmentManager().pull(false, u, true, obj -> {});
-            }
-
-            if(store) {
-                profiles.put(profile.getUuid(), profile);
-            }
-
-            return profile;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Profile pullSQL(UUID uuid, boolean store) {
-        try {
-            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("SELECT * FROM profiles WHERE id = ?");
-            ps.setString(1, uuid.toString());
-            ResultSet rs = ps.executeQuery();
-
-            if (!plugin.getSql().usingLite) {
-                rs.beforeFirst();
-                rs.next();
-            } else {
-                if (!rs.next()) {
-                    return null;
-                }
-            }
-
-            List<UUID> punishments = new ArrayList<>();
-            String punishmentsString = rs.getString("punishments");
-            if (punishmentsString != null) {
-                String[] punishmentsStrings = punishmentsString.split("\\s*,\\s*");
-                for (String string : punishmentsStrings) {
-                    punishments.add(UUID.fromString(string));
-                }
-            } else {
-                punishments = null;
-            }
-
-            String ipHistoryString = rs.getString("ip_history");
-            List<String> ipHistory = null;
-            if (ipHistoryString != null) {
-                ipHistory = Arrays.asList(ipHistoryString.split("\\s*,\\s*"));
-            }
-
-            String name = rs.getString("name");
-            String currentIp = rs.getString("current_ip");
-
-            Profile profile = new Profile(plugin, uuid);
-            profile.importSQL(name, currentIp, ipHistory, punishments);
-
-            for(UUID u : profile.getPunishments()) {
-                plugin.getPunishmentManager().pull(false, u, true, obj -> {});
-            }
-
-            if(store) {
-                profiles.put(profile.getUuid(), profile);
-            }
-
-            return profile;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void push(boolean async, Profile profile, boolean unload) {
-        if (!plugin.usingMongo) {
-            profile.exportSQL();
-        } else {
-            MongoUpdate mu = new MongoUpdate("profiles", profile.getUuid());
-            mu.setUpdate(profile.export());
-            plugin.getMongo().massUpdate(async, mu);
-        }
+        plugin.getStorage().saveProfile(async, profile);
 
         if (plugin.getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
             JsonObject json = new JsonObject();

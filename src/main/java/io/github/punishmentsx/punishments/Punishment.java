@@ -227,6 +227,7 @@ public @Data class Punishment {
         Notifications.sendMessage(plugin, silent, message, hover);
     }
 
+    @Deprecated
     public void importFromDocument(Document d) {
         setVictim(d.get("victim", UUID.class));
         setIssuer(d.get("issuer", UUID.class));
@@ -241,70 +242,5 @@ public @Data class Punishment {
         setType(Type.valueOf(d.getString("type")));
         setSilentIssue(d.getBoolean("silent_issue"));
         setSilentPardon(d.getBoolean("silent_pardon"));
-    }
-
-    public void importSQL(UUID victim, UUID issuer, UUID pardoner, String stack, String issueReason, String pardonReason, Date issued, Date expires, Date pardoned, String type, boolean silentIssue, boolean silentPardon) {
-        setVictim(victim);
-        setIssuer(issuer);
-        setPardoner(pardoner);
-
-        setStack(stack);
-        setIssueReason(issueReason);
-        setPardonReason(pardonReason);
-        setIssued(issued);
-        setExpires(expires);
-        setPardoned(pardoned);
-        setType(Type.valueOf(type));
-        setSilentIssue(silentIssue);
-        setSilentPardon(silentPardon);
-    }
-
-    public Map<String, Object> export() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("victim", victim);
-        map.put("issuer", issuer);
-        map.put("pardoner", pardoner);
-
-        map.put("stack", stack);
-        map.put("issue_reason", issueReason);
-        map.put("pardon_reason", pardonReason);
-        map.put("issued", issued);
-        map.put("expires", expires);
-        map.put("pardoned", pardoned);
-        map.put("type", type.toString());
-        map.put("silent_issue", silentIssue);
-        map.put("silent_pardon", silentPardon);
-        return map;
-    }
-
-    public void exportSQL() {
-        try {
-            java.sql.Date expirySQL = null;
-            if (expires != null) expirySQL = new java.sql.Date(expires.getTime());
-            java.sql.Date issuedSQL = new java.sql.Date(issued.getTime());
-            java.sql.Date pardonedSQL = null;
-            if (pardoned != null) pardonedSQL = new java.sql.Date(pardoned.getTime());
-
-            String pardonerString = pardoner == null ? null : pardoner.toString();
-
-            PreparedStatement ps = plugin.getSql().getConnection().prepareStatement("REPLACE INTO punishments(id, pardoner, stack, expires, issue_reason, silent_pardon, victim, silent_issue, pardon_reason, issued, pardoned, type, issuer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            ps.setString(1, getUuid().toString());
-            ps.setString(2, pardonerString);
-            ps.setString(3, stack);
-            ps.setDate(4, expirySQL);
-            ps.setString(5, issueReason);
-            ps.setBoolean(6, silentPardon);
-            ps.setString(7, victim.toString());
-            ps.setBoolean(8, silentIssue);
-            ps.setString(9, pardonReason);
-            ps.setDate(10, issuedSQL);
-            ps.setDate(11, pardonedSQL);
-            ps.setString(12, type.toString());
-            ps.setString(13, issuer == null ? null : issuer.toString());
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
