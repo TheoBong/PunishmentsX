@@ -11,15 +11,10 @@ import java.util.Set;
 
 public class RedisSubscriber {
 
-    private Jedis jedis;
-    private final PunishmentsX plugin;
-
-    private JedisPubSub jedisPubSub;
+    private final JedisPubSub jedisPubSub;
     private @Getter Set<RedisMessageListener> listeners;
-    private String rChannel;
+    private final String rChannel;
     public RedisSubscriber(Jedis jedis, PunishmentsX plugin) {
-        this.jedis = jedis;
-        this.plugin = plugin;
         this.listeners = new HashSet<>();
 
         this.rChannel = Locale.REDIS_CHANNEL.format(plugin);
