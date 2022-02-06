@@ -14,10 +14,12 @@ import io.github.punishmentsx.listeners.ChatListener;
 import io.github.punishmentsx.listeners.JoinListener;
 import io.github.punishmentsx.listeners.QuitListener;
 import io.github.punishmentsx.profiles.ProfileManager;
+import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.punishments.PunishmentManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
@@ -140,6 +142,10 @@ public class PunishmentsX extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public void unregisterListener(Listener listener) {
+        HandlerList.unregisterAll(listener);
     }
 
 }

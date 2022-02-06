@@ -3,3 +3,6 @@ description: An extremely advanced punishments plugin (https://github.com/Cowing
 version: ${punishmentsx.desc}
 author: Cowings
 main: io.github.punishmentsx.PunishmentsX
+softdepend:
+  - Essentials
+  - VentureChat

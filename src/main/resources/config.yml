@@ -289,3 +289,4 @@ MENUS:
         - "&eReason: &f%issueReason%"
         - "&eExpiry: &f%expiry%"
         - "&7&m-----------------------------"
+        - "&eClick here to pardon this player!"

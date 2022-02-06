@@ -97,11 +97,10 @@ public class CmdPunishCommand extends BaseCommand {
             if (targetProfile.getActivePunishment(type) == null || type.equals(Punishment.Type.KICK) || type.equals(Punishment.Type.WARN)) {
                 targetProfile.punish(type, section.getName(), issuerUUID, reason, expiration, silent);
 
-                if (expiration != null) {
-                    sender.sendMessage(Colors.convertLegacyColors("&aYou have temporarily " + type.pastMessage() + " " + targetProfile.getName() + " for: " + reason + "."));
-                } else {
-                    sender.sendMessage(Colors.convertLegacyColors("&aYou have " + type.pastMessage() + " " + targetProfile.getName() + " for:&f " + reason + "."));
-                }
+                sender.sendMessage(Locale.PUNISHMENT_SUCCESS.format(plugin)
+                        .replace("%type%", type.pastMessage())
+                        .replace("%target%", targetProfile.getName())
+                        .replace("%reason%", reason));
             } else {
                 sender.sendMessage(ChatColor.RED + "The target you specified already has an active punishment of that type. You must unmute/unban that player first!");;
             }

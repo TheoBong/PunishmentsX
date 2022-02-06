@@ -2,10 +2,12 @@ package io.github.punishmentsx.menus;
 
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
+import io.github.punishmentsx.listeners.PromptListener;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
 import io.github.punishmentsx.utils.PlayerUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -132,9 +134,15 @@ public class HistoryMenu {
                         .replace("%expiry%", punishment.expiry())));
             }
             button.setLore(lore);
-        }
-        button.setCloseOnClick(false);
 
+            button.setButtonAction((player1, gui1, button1, event1) -> {
+                player1.closeInventory();
+                player1.sendMessage("Type the reason for the pardon here:");
+                plugin.registerListener(new PromptListener(plugin, player1, punishment));
+            });
+        }
+
+        button.setCloseOnClick(false);
         return button;
     }
 }

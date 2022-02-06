@@ -88,7 +88,7 @@ public class PunishMenu {
 
         for (String key : config.getConfigurationSection("MENUS.PUNISH.SLOTS").getKeys(false)) {
             ConfigurationSection section = config.getConfigurationSection("MENUS.PUNISH.SLOTS." + key);
-            gui.addButton(createButton(targetProfile, staff, notes, section));
+            gui.addButton(createButton(plugin, targetProfile, staff, notes, section));
         }
 
         plugin.getServer().getScheduler().runTask(plugin, () -> {
@@ -96,7 +96,7 @@ public class PunishMenu {
         });
     }
 
-    public static Button createButton(Profile targetProfile, Player issuer, String notes, ConfigurationSection section) {
+    public static Button createButton(PunishmentsX plugin, Profile targetProfile, Player issuer, String notes, ConfigurationSection section) {
         Button button = new Button(Material.valueOf(section.getString("MATERIAL")), section.getString("NAME"));
         int offenses = Stackables.offenseNumber(targetProfile, section.getName());
 
@@ -124,11 +124,10 @@ public class PunishMenu {
             if (targetProfile.getActivePunishment(type) == null || type.equals(Punishment.Type.KICK) || type.equals(Punishment.Type.WARN)) {
                 targetProfile.punish(type, section.getName(), issuer.getUniqueId(), reason, expiration, silent);
 
-                if (expiration != null) {
-                    issuer.sendMessage(Colors.convertLegacyColors("&aYou have temporarily " + type.pastMessage() + " " + targetProfile.getName() + " for: " + reason + "."));
-                } else {
-                    issuer.sendMessage(Colors.convertLegacyColors("&aYou have " + type.pastMessage() + " " + targetProfile.getName() + " for:&f " + reason + "."));
-                }
+                issuer.sendMessage(Locale.PUNISHMENT_SUCCESS.format(plugin)
+                        .replace("%type%", type.pastMessage())
+                        .replace("%target%", targetProfile.getName())
+                        .replace("%reason%", reason));
             } else {
                 issuer.sendMessage(ChatColor.RED + "The target you specified already has an active punishment of that type. You must unmute/unban that player first!");;
             }
