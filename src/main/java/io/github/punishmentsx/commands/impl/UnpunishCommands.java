@@ -25,18 +25,15 @@ public class UnpunishCommands extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args, String alias) {
-        if (sender instanceof Player && !sender.hasPermission(Locale.UNPUNISH_PERMISSION.format(plugin))) {
+        if (!sender.hasPermission(Locale.UNPUNISH_PERMISSION.format(plugin))) {
             sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
             return;
         }
 
         String label = alias.toLowerCase();
         if(args.length > 1) {
-            Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
             if (targetProfile == null) {
-                sender.sendMessage("Player has never logged on the server!");
-                sender.sendMessage("Names are case-sensitive for offline players!");
                 return;
             }
 

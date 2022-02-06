@@ -29,7 +29,7 @@ public class CmdPunishCommand extends BaseCommand {
 
     @Override
     protected void execute(CommandSender sender, String[] args, String alias) {
-        if (sender instanceof Player && !sender.hasPermission(Locale.PUNISH_PERMISSION.format(plugin))) {
+        if (!sender.hasPermission(Locale.PUNISH_PERMISSION.format(plugin))) {
             sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
             return;
         }
@@ -62,11 +62,8 @@ public class CmdPunishCommand extends BaseCommand {
                 }
             }
 
-            Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
             if (targetProfile == null) {
-                sender.sendMessage("Player has never logged on the server!");
-                sender.sendMessage("Names are case-sensitive for offline players!");
                 return;
             }
 

@@ -33,11 +33,8 @@ public class WhyBannedCommand extends BaseCommand {
         }
 
         ThreadUtil.runTask(true, plugin, () -> {
-            Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
             if (targetProfile == null) {
-                sender.sendMessage("Player has never logged on the server!");
-                sender.sendMessage("Names are case-sensitive for offline players!");
                 return;
             }
 

@@ -23,28 +23,27 @@ public class HistoryCommand extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args, String alias) {
-        if (sender instanceof Player && !sender.hasPermission(Locale.HISTORY_PERMISSION.format(plugin))) {
+        if (!sender.hasPermission(Locale.HISTORY_PERMISSION.format(plugin))) {
             sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
             return;
         }
 
-        if (sender instanceof Player) {
-            if (args.length != 1) {
-                sender.sendMessage(ChatColor.RED + "Usage: /history <player>");
+        if (getPlayer(sender) == null) {
+            return;
+        }
+
+        if (args.length != 1) {
+            sender.sendMessage(ChatColor.RED + "Usage: /history <player>");
+            return;
+        }
+
+        ThreadUtil.runTask(true, plugin, () -> {
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
+            if (targetProfile == null) {
                 return;
             }
 
-            ThreadUtil.runTask(true, plugin, () -> {
-                Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
-                if (targetProfile == null) {
-                    sender.sendMessage("Player has never logged on the server!");
-                    sender.sendMessage("Names are case-sensitive for offline players!");
-                    return;
-                }
-
-                HistoryMenu.openHistoryMenu(plugin, (Player) sender, targetProfile, null);
-            });
-        }
+            HistoryMenu.openHistoryMenu(plugin, (Player) sender, targetProfile, null);
+        });
     }
 }

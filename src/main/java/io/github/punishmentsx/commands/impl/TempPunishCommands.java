@@ -30,18 +30,15 @@ public class TempPunishCommands extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args, String alias) {
-        if (sender instanceof Player && !sender.hasPermission(Locale.MANUAL_PERMISSION.format(plugin))) {
+        if (!sender.hasPermission(Locale.MANUAL_PERMISSION.format(plugin))) {
             sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
             return;
         }
 
         String label = alias.toLowerCase();
         if(args.length > 2) {
-            Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
             if (targetProfile == null) {
-                sender.sendMessage("Player has never logged on the server!");
-                sender.sendMessage("Names are case-sensitive for offline players!");
                 return;
             }
 
@@ -131,7 +128,11 @@ public class TempPunishCommands extends BaseCommand {
 
                 if(b) {
                     targetProfile.punish(punishmentType, "MANUAL", issuer, sb.toString(), calendar.getTime(), silent);
-                    sender.sendMessage(Colors.convertLegacyColors("&aYou have temporarily " + punishmentType.pastMessage() + " " + targetProfile.getName() + " for:&f " + sb.toString() + "."));
+
+                    sender.sendMessage(Locale.PUNISHMENT_SUCCESS.format(plugin)
+                            .replace("%type%", punishmentType.pastMessage())
+                            .replace("%target%", targetProfile.getName())
+                            .replace("%reason%", sb.toString()));
                 } else {
                     sender.sendMessage(ChatColor.RED + "You did not specify a valid timeframe.");
                 }

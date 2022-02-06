@@ -27,42 +27,41 @@ public class PunishCommand extends BaseCommand {
 
     @Override
     protected void execute(CommandSender sender, String[] args, String alias) {
-        if (sender instanceof Player && !sender.hasPermission(Locale.PUNISH_PERMISSION.format(plugin))) {
+        if (!sender.hasPermission(Locale.PUNISH_PERMISSION.format(plugin))) {
             sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
             return;
         }
 
-        if(sender instanceof Player) {
-            if (args.length < 1) {
-                sender.sendMessage(ChatColor.RED + "Usage: /punish <player> [notes]");
+        if (getPlayer(sender) == null) {
+            return;
+        }
+
+        if (args.length < 1) {
+            sender.sendMessage(ChatColor.RED + "Usage: /punish <player> [notes]");
+            return;
+        }
+
+        ThreadUtil.runTask(true, plugin, () -> {
+            if (args.length > 1) {
+                StringBuilder sb = new StringBuilder();
+                for(int i = 1; i < args.length; i++) {
+                    String s = args[i];
+                    sb.append(args[i]);
+                    if (i + 1 != args.length) {
+                        sb.append(" ");
+                    }
+                }
+                notes = sb.toString();
+            } else {
+                notes = "None";
+            }
+
+            Profile targetProfile = getProfile(sender, plugin, args[0]);
+            if (targetProfile == null) {
                 return;
             }
 
-            ThreadUtil.runTask(true, plugin, () -> {
-                if (args.length > 1) {
-                    StringBuilder sb = new StringBuilder();
-                    for(int i = 1; i < args.length; i++) {
-                        String s = args[i];
-                        sb.append(args[i]);
-                        if (i + 1 != args.length) {
-                            sb.append(" ");
-                        }
-                    }
-                    notes = sb.toString();
-                } else {
-                    notes = "None";
-                }
-
-                Profile targetProfile = PlayerUtil.findPlayer(plugin, args[0]);
-
-                if (targetProfile == null) {
-                    sender.sendMessage("Player has never logged on the server!");
-                    sender.sendMessage("Names are case-sensitive for offline players!");
-                    return;
-                }
-
-                PunishMenu.openPunishMenu(plugin, (Player) sender, targetProfile, notes);
-            });
-        }
+            PunishMenu.openPunishMenu(plugin, (Player) sender, targetProfile, notes);
+        });
     }
 }
