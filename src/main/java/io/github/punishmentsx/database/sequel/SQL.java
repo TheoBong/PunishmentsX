@@ -36,7 +36,7 @@ public class SQL extends Database {
     public Profile loadProfile(boolean async, String name, boolean store, MongoDeserializedResult mdr) {
         try {
             PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM profiles WHERE name = ?");
-            ps.setString(1, name);
+            ps.setString(1, name.toLowerCase());
             ResultSet rs = ps.executeQuery();
 
             if (plugin.getStorage().type() == Database.Type.MySQL) {
@@ -146,7 +146,7 @@ public class SQL extends Database {
             ps.setString(1, profile.getUuid().toString());
             ps.setString(2, ipHistoryString);
             ps.setString(3, punishmentsString);
-            ps.setString(4, profile.getName());
+            ps.setString(4, profile.getName().toLowerCase());
             ps.setString(5, profile.getCurrentIp());
             ps.executeUpdate();
         } catch (SQLException e) {

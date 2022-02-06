@@ -15,11 +15,7 @@ public class PlayerUtil {
         if (targetPlayer == null) {
             targetProfile = plugin.getProfileManager().find(target, false);
         } else {
-            try {
-                targetProfile = plugin.getProfileManager().get(targetPlayer.getUniqueId());
-            } catch (Exception e) {
-                return null;
-            }
+            targetProfile = plugin.getProfileManager().get(targetPlayer.getUniqueId());
         }
 
         return targetProfile;
@@ -32,11 +28,7 @@ public class PlayerUtil {
         if (targetPlayer == null) {
             targetProfile = plugin.getProfileManager().find(uuid, false);
         } else {
-            try {
-                targetProfile = plugin.getProfileManager().get(targetPlayer.getUniqueId());
-            } catch (Exception e) {
-                return null;
-            }
+            targetProfile = plugin.getProfileManager().get(targetPlayer.getUniqueId());
         }
 
         return targetProfile;

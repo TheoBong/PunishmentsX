@@ -48,7 +48,7 @@ public class Mongo extends Database {
     }
 
     public Profile loadProfile(boolean async, String name, boolean store, MongoDeserializedResult mdr) {
-        getDocument(false, "profiles", "name", name, document -> {
+        getDocument(false, "profiles", "name", name.toLowerCase(), document -> {
             if(document != null) {
                 UUID uuid = (UUID) document.get("_id");
                 Profile profile = new Profile(plugin, uuid);
@@ -94,7 +94,7 @@ public class Mongo extends Database {
 
     public void saveProfile(boolean async, Profile profile) {
         Map<String, Object> map = new HashMap<>();
-        map.put("name", profile.getName());
+        map.put("name", profile.getName().toLowerCase());
         map.put("current_ip", profile.getCurrentIp());
         map.put("ip_history", profile.getIpHistory());
         map.put("punishments", profile.getPunishments());
