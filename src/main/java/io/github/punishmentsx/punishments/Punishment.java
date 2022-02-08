@@ -219,6 +219,10 @@ public @Data class Punishment {
         String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (isActive() ? (expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
 
         String message = Locale.BROADCAST.format(plugin)
+                .replace("%duration%", duration())
+                .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
+                .replace("%expiry%", expiry())
+                .replace("%reason%", issueReason)
                 .replace("%target%", victimName)
                 .replace("%type%", typeString)
                 .replace("%issuer%", issuerName);
