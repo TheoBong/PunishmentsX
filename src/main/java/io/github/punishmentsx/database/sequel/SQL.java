@@ -43,10 +43,7 @@ public class SQL extends Database {
                 rs.beforeFirst();
                 rs.next();
             } else {
-                if (!rs.next()) {
-                    plugin.getLogger().log(Level.WARNING, "Rs doesn't have next");
-                    return null;
-                }
+                if (!rs.next()) return null;
             }
 
             UUID uuid = UUID.fromString(rs.getString("id"));
@@ -89,10 +86,8 @@ public class SQL extends Database {
                 rs.beforeFirst();
                 rs.next();
             } else {
-                if (!rs.next()) {
-                    plugin.getLogger().log(Level.WARNING, "Rs doesn't have next");
-                    return null;
-                }
+                if (!rs.next()) return null;
+
             }
 
             List<UUID> punishments = new ArrayList<>();
@@ -164,10 +159,7 @@ public class SQL extends Database {
                 rs.beforeFirst();
                 rs.next();
             } else {
-                if (!rs.next()) {
-                    plugin.getLogger().log(Level.WARNING, "Rs doesn't have next");
-                    return;
-                }
+                if (!rs.next()) return;
             }
 
             UUID victim = UUID.fromString(rs.getString("victim"));

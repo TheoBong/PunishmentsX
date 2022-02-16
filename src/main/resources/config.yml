@@ -144,7 +144,7 @@ MESSAGES:
       - "&cVictim: &f%victimName%"
       - "&cReason: &f%reason%"
       - "&cPardoner: &f%issuerName%"
-      - "&cPardon Reason: %reason%"
+      - "&cPardon Reason: &f%pardonReason%"
   BLACKLIST_MESSAGE:
     - "&4Your account has been blacklisted"
     - "&fReason: %reason%"

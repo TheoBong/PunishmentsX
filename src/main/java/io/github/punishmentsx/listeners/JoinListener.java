@@ -44,7 +44,6 @@ public class JoinListener implements Listener {
         } else {
             profile = plugin.getProfileManager().find(uuid, true);
             if (profile == null) {
-                plugin.getLogger().log(Level.WARNING, "Created new profile!");
                 profile = plugin.getProfileManager().createProfile(uuid);
             }
 
