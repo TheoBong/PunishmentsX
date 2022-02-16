@@ -38,4 +38,4 @@ Please make sure to have bug fixes/improvements in seperate pull requests from n
 * Code comments
 
 ## License
-Store Plugin is licensed under the permissive MIT license. Please see [`LICENSE.txt`](https://github.com/Cowings/PunishmentsX/blob/master/LICENSE.txt) for more info.
+Store Plugin is licensed under the permissive MIT license. Please see [`LICENSE.txt`](https://github.com/Cowings/PunishmentsX/blob/main/LICENSE) for more info.
