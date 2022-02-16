@@ -49,7 +49,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        if (plugin.getConfig().getBoolean("FILTER.ENABLED")) {
+        if (plugin.getConfig().getBoolean("FILTER.ENABLED") && !player.hasPermission(plugin.getConfig().getString("PERMISSIONS.BYPASS_FILTER"))) {
             if (plugin.getConfig().getBoolean("FILTER.BLOCK_UNICODE")) {
                 if (Arrays.stream(event.getMessage().split("")).map(isInvalid::matcher).anyMatch(Matcher::matches)) {
                     event.setCancelled(true);

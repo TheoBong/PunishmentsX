@@ -165,6 +165,7 @@ MESSAGES:
 
 PERMISSIONS:
   SILENT_VIEW: "punishments.view.silent" #See silent punishments in chat & see hover of public punishments
+  BYPASS_FILTER: "punishments.filter.bypass"
   HISTORY: "punishments.history" #/history
   PUNISH: "punishments.punish" #/punish, /cmdpunish
   UNPUNISH: "punishments.unpunish" #/unban, /unmute
@@ -178,6 +179,7 @@ MENUS:
         NAME: "&c&lCheats" # Name in GUI
         MATERIAL: "DIAMOND_SWORD" # Material in GUI
         DEFAULT_REASON: "Cheating" # Reason if none is specified in punish command
+        PERMISSION: "punishments.general"
         PUNISHMENTS:
           - "ban:30d" # 1st offense
           - "ban:90d" # 2nd offense
@@ -195,6 +197,7 @@ MENUS:
         NAME: "&c&lSpamming"
         MATERIAL: "PAPER"
         DEFAULT_REASON: "Spamming"
+        PERMISSION: "punishments.general"
         PUNISHMENTS:
           - "mute:30m"
           - "mute:1d"
@@ -215,6 +218,7 @@ MENUS:
         NAME: "&c&lFoul Language"
         MATERIAL: "BOOK"
         DEFAULT_REASON: "Foul Language"
+        PERMISSION: "punishments.general"
         PUNISHMENTS:
           - "mute:1d"
           - "mute:7d"
@@ -235,6 +239,7 @@ MENUS:
         NAME: "&c&lAdvertising"
         MATERIAL: "GOLD_SWORD"
         DEFAULT_REASON: "Advertising"
+        PERMISSION: "punishments.general"
         PUNISHMENTS:
           - "mute:30d"
           - "mute:90d"

@@ -88,6 +88,9 @@ public class PunishMenu {
 
         for (String key : config.getConfigurationSection("MENUS.PUNISH.SLOTS").getKeys(false)) {
             ConfigurationSection section = config.getConfigurationSection("MENUS.PUNISH.SLOTS." + key);
+
+            if (section.getString("PERMISSION") != null && !staff.hasPermission(section.getString("PERMISSION"))) continue;
+
             gui.addButton(createButton(plugin, targetProfile, staff, notes, section));
         }
 
