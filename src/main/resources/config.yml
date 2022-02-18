@@ -138,6 +138,7 @@ MESSAGES:
       - "&cReason: &f%reason%"
       - "&cExpires: &f%expiry%"
   UNPUNISHMENT:
+    PARDON_PROMPT: "&aType the reason for the pardon in chat:"
     SUCCESS: "&aYou have un%type% %target% for: &f%reason%."
     HOVER:
       - "&f&l * &c&l%type% %silentPrefix%"

@@ -134,6 +134,14 @@ public @Data class Punishment {
         }
     }
 
+    public String originalDuration() {
+        if (expires == null) {
+            return "Permanent";
+        } else {
+            return TimeUtil.formatTimeMillis(expires.getTime() - issued.getTime());
+        }
+    }
+
     public boolean isActive() {
         boolean b = true;
 
@@ -175,7 +183,7 @@ public @Data class Punishment {
         if(player != null && player.isOnline()) {
             victimName = player.getName();
             if(isActive()) {
-                type.action(plugin, expiry(), duration(), issueReason, player);
+                type.action(plugin, expiry(), originalDuration(), issueReason, player);
             }
         } else {
             Profile victimProfile = PlayerUtil.findPlayer(plugin, victim);
@@ -190,7 +198,7 @@ public @Data class Punishment {
             for (String string : Locale.PUNISHMENT_HOVER.formatLines(plugin)) {
                 list.add(string
                         .replace("%type%", StringUtils.capitalize(type.toString().toLowerCase()))
-                        .replace("%duration%", duration())
+                        .replace("%duration%", originalDuration())
                         .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
                         .replace("%victimName%", victimName)
                         .replace("%issuerName%", issuerName)
@@ -199,7 +207,7 @@ public @Data class Punishment {
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, victim, uuid, duration(), stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
+            WebHook.sendWebhook(plugin, victim, uuid, originalDuration(), stack, type.pastMessage(), victimName, issueReason, issuerName, null, expiry());
         } else {
             List<String> list = new ArrayList<>();
             for (String string : Locale.UNPUNISHMENT_HOVER.formatLines(plugin)) {
@@ -213,13 +221,13 @@ public @Data class Punishment {
             }
 
             hover = String.join("\n", list);
-            WebHook.sendWebhook(plugin, victim, uuid, duration(), stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
+            WebHook.sendWebhook(plugin, victim, uuid, originalDuration(), stack, "un" + type.pastMessage(), victimName, issueReason, issuerName, pardonReason, null);
         }
 
         String typeString = type.equals(Type.KICK) || type.equals(Type.WARN) ? type.pastMessage() : (isActive() ? (expires == null ? "permanently " : "temporarily ") : "un") + type.pastMessage();
 
         String message = Locale.BROADCAST.format(plugin)
-                .replace("%duration%", duration())
+                .replace("%duration%", originalDuration())
                 .replace("%silentPrefix%", silentIssue ? Locale.SILENT_PREFIX.format(plugin) : "")
                 .replace("%expiry%", expiry())
                 .replace("%reason%", issueReason)

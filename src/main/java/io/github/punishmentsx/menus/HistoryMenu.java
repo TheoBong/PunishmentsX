@@ -106,7 +106,7 @@ public class HistoryMenu {
                 lore.add(Colors.convertLegacyColors(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
-                        .replace("%duration%", punishment.duration())
+                        .replace("%duration%", punishment.originalDuration())
                         .replace("%stack%", punishment.getStack())
                         .replace("%active%", punishment.isActive() + "")
                         .replace("%issuedDate%", punishment.getIssued().toString())
@@ -125,7 +125,7 @@ public class HistoryMenu {
                 lore.add(Colors.convertLegacyColors(string
                         .replace("%victim%", victimName)
                         .replace("%type%", punishment.getType() + "")
-                        .replace("%duration%", punishment.duration())
+                        .replace("%duration%", punishment.originalDuration())
                         .replace("%stack%", punishment.getStack())
                         .replace("%active%", punishment.isActive() + "")
                         .replace("%issuedDate%", punishment.getIssued().toString())
@@ -137,7 +137,7 @@ public class HistoryMenu {
 
             button.setButtonAction((player1, gui1, button1, event1) -> {
                 player1.closeInventory();
-                player1.sendMessage("Type the reason for the pardon here:");
+                player1.sendMessage(Locale.PARDON_PROMPT.format(plugin));
                 plugin.registerListener(new PromptListener(plugin, player1, punishment));
             });
         }

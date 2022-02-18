@@ -51,7 +51,7 @@ public class PunishmentsX extends JavaPlugin {
     public void onEnable() {
         this.saveDefaultConfig();
 
-        switch (getConfig().getString("DATABASE.USE")) {
+        switch (getConfig().getString("DATABASE.USE").toLowerCase()) {
             case "mongo":
                 mongo = new Mongo(this);
                 storage = mongo;
@@ -108,7 +108,7 @@ public class PunishmentsX extends JavaPlugin {
         registerCommand(new CmdPunishCommand(this, "cmdpunish"));
 
         if (getConfig().getBoolean("ANTI_EVASION.ENABLED")) {
-            if (getConfig().getString("DATABASE.USE").equals("mongo")) {
+            if (storage instanceof Mongo) {
                 registerListener(new EvasionListener(this));
                 registerCommand(new WhyBannedCommand(this, "whybanned"));
                 registerCommand(new ExemptCommand(this, "exempt"));

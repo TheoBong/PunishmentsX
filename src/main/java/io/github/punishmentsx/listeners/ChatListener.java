@@ -33,6 +33,10 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
         Player player = event.getPlayer();
         Profile profile = plugin.getProfileManager().get(player.getUniqueId());
 

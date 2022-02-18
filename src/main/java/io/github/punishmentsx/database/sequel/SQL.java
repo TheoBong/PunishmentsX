@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
-import java.util.logging.Level;
 
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.Database;
@@ -41,10 +40,9 @@ public class SQL extends Database {
 
             if (plugin.getStorage().type() == Database.Type.MySQL) {
                 rs.beforeFirst();
-                rs.next();
-            } else {
-                if (!rs.next()) return null;
             }
+
+            if (!rs.next()) return null;
 
             UUID uuid = UUID.fromString(rs.getString("id"));
             String currentIp = rs.getString("current_ip");
@@ -84,11 +82,9 @@ public class SQL extends Database {
 
             if (plugin.getStorage().type() == Database.Type.MySQL) {
                 rs.beforeFirst();
-                rs.next();
-            } else {
-                if (!rs.next()) return null;
-
             }
+
+            if (!rs.next()) return null;
 
             List<UUID> punishments = new ArrayList<>();
             String punishmentsString = rs.getString("punishments");
@@ -168,9 +164,9 @@ public class SQL extends Database {
             String stack = rs.getString("stack");
             String issueReason = rs.getString("issue_reason");
             String pardonReason = rs.getString("pardon_reason");
-            Date issued = rs.getTime("issued");
-            Date expires = rs.getTime("expires");
-            Date pardoned = rs.getTime("pardoned");
+            Date issued = new Date(new Long(rs.getString("issued"))) ;
+            Date expires = rs.getString("expires") == null ? null : new Date(new Long(rs.getString("expires")));
+            Date pardoned = rs.getString("pardoned") == null ? null : new Date(new Long(rs.getString("pardoned")));
             String punishmentType = rs.getString("type");
             boolean silentIssue = rs.getBoolean("silent_issue");
             boolean silentPardon = rs.getBoolean("silent_pardon");
@@ -201,11 +197,11 @@ public class SQL extends Database {
 
     public void savePunishment(boolean async, Punishment punishment) {
         try {
-            java.sql.Time expirySQL = null;
-            if (punishment.getExpires() != null) expirySQL = new java.sql.Time(punishment.getExpires().getTime());
-            java.sql.Time issuedSQL = new java.sql.Time(punishment.getIssued().getTime());
-            java.sql.Time pardonedSQL = null;
-            if (punishment.getPardoned() != null) pardonedSQL = new java.sql.Time(punishment.getPardoned().getTime());
+            String expiry = null;
+            if (punishment.getExpires() != null) expiry = punishment.getExpires().getTime() + "";
+            String issued = punishment.getIssued().getTime() + "";
+            String pardoned = null;
+            if (punishment.getPardoned() != null) pardoned = punishment.getPardoned().getTime() + "";
 
             String pardonerString = punishment.getPardoner() == null ? null : punishment.getPardoner().toString();
 
@@ -213,14 +209,14 @@ public class SQL extends Database {
             ps.setString(1, punishment.getUuid().toString());
             ps.setString(2, pardonerString);
             ps.setString(3, punishment.getStack());
-            ps.setTime(4, expirySQL);
+            ps.setString(4, expiry);
             ps.setString(5, punishment.getIssueReason());
             ps.setBoolean(6, punishment.isSilentPardon());
             ps.setString(7, punishment.getVictim().toString());
             ps.setBoolean(8, punishment.isSilentIssue());
             ps.setString(9, punishment.getPardonReason());
-            ps.setTime(10, issuedSQL);
-            ps.setTime(11, pardonedSQL);
+            ps.setString(10, issued);
+            ps.setString(11, pardoned);
             ps.setString(12, punishment.getType().toString());
             ps.setString(13, punishment.getIssuer() == null ? null : punishment.getIssuer().toString());
 
@@ -268,7 +264,7 @@ public class SQL extends Database {
 
             Connection con = getConnection();
 
-            PreparedStatement stat = con.prepareStatement("CREATE TABLE IF NOT EXISTS punishments (id VARCHAR(36) PRIMARY KEY, pardoner VARCHAR(36), stack VARCHAR(36), expires TIME, issue_reason LONGTEXT, silent_pardon BOOLEAN, victim VARCHAR(36), silent_issue BOOLEAN, pardon_reason LONGTEXT, issued TIME, pardoned TIME, type VARCHAR(16), issuer VARCHAR(36));");
+            PreparedStatement stat = con.prepareStatement("CREATE TABLE IF NOT EXISTS punishments (id VARCHAR(36) PRIMARY KEY, pardoner VARCHAR(36), stack VARCHAR(36), expires LONGTEXT, issue_reason LONGTEXT, silent_pardon BOOLEAN, victim VARCHAR(36), silent_issue BOOLEAN, pardon_reason LONGTEXT, issued LONGTEXT, pardoned LONGTEXT, type VARCHAR(16), issuer VARCHAR(36));");
             stat.execute();
             PreparedStatement stat2 = con.prepareStatement("CREATE TABLE IF NOT EXISTS profiles (id VARCHAR(36) PRIMARY KEY, ip_history LONGTEXT, punishments LONGTEXT, name VARCHAR(36), current_ip VARCHAR(45));");
             stat2.execute();
