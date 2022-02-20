@@ -50,13 +50,8 @@ public class PunishCommands extends BaseCommand {
                     punishmentType = Punishment.Type.WARN;
                     break;
                 default:
-                    punishmentType = null;
-                    break;
-            }
-
-            if (punishmentType == null) {
-                sender.sendMessage(ChatColor.RED + "Available commands: /ban, /blacklist, /kick, /mute, /warn.");
-                return;
+                    sender.sendMessage(ChatColor.RED + "Available commands: /ban, /blacklist, /kick, /mute, /warn.");
+                    return;
             }
 
             if (!sender.hasPermission(punishmentType.permission(plugin))) {

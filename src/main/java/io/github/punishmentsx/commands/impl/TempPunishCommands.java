@@ -5,8 +5,6 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
-import io.github.punishmentsx.utils.Colors;
-import io.github.punishmentsx.utils.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,10 +28,6 @@ public class TempPunishCommands extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args, String alias) {
-        if (!sender.hasPermission(Locale.MANUAL_PERMISSION.format(plugin))) {
-            sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
-            return;
-        }
 
         String label = alias.toLowerCase();
         if(args.length > 2) {
@@ -55,6 +49,11 @@ public class TempPunishCommands extends BaseCommand {
                 default:
                     sender.sendMessage(ChatColor.RED + "Available commands: /tempban, /tempmute.");
                     return;
+            }
+
+            if (!sender.hasPermission(punishmentType.permission(plugin))) {
+                sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
+                return;
             }
 
             UUID issuer = null;
