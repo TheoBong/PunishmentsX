@@ -24,10 +24,6 @@ public class PunishCommands extends BaseCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args, String alias) {
-        if (!sender.hasPermission(Locale.MANUAL_PERMISSION.format(plugin))) {
-            sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
-            return;
-        }
 
         String label = alias.toLowerCase();
         if(args.length > 1) {
@@ -54,8 +50,18 @@ public class PunishCommands extends BaseCommand {
                     punishmentType = Punishment.Type.WARN;
                     break;
                 default:
-                    sender.sendMessage(ChatColor.RED + "Available commands: /ban, /blacklist, /kick, /mute, /warn.");
-                    return;
+                    punishmentType = null;
+                    break;
+            }
+
+            if (punishmentType == null) {
+                sender.sendMessage(ChatColor.RED + "Available commands: /ban, /blacklist, /kick, /mute, /warn.");
+                return;
+            }
+
+            if (!sender.hasPermission(punishmentType.permission(plugin))) {
+                sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
+                return;
             }
 
             UUID issuer = null;

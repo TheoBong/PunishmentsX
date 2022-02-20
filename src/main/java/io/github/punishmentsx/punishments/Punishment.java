@@ -43,6 +43,23 @@ public @Data class Punishment {
             }
         }
 
+        public String permission(PunishmentsX plugin) {
+            switch(this) {
+                case BAN:
+                    return Locale.BAN_PERMISSION.format(plugin);
+                case BLACKLIST:
+                    return Locale.BLACKLIST_PERMISSION.format(plugin);
+                case KICK:
+                    return Locale.KICK_PERMISSION.format(plugin);
+                case MUTE:
+                    return Locale.MUTE_PERMISSION.format(plugin);
+                case WARN:
+                    return Locale.WARN_PERMISSION.format(plugin);
+                default:
+                    return "null";
+            }
+        }
+
         public Button getButton(PunishmentsX plugin, Punishment punishment) {
             String uuid = punishment.getUuid().toString();
             switch (this) {

@@ -73,6 +73,11 @@ public class CmdPunishCommand extends BaseCommand {
                 return;
             }
 
+            if (section.getString("PERMISSION") != null && !sender.hasPermission(section.getString("PERMISSION"))) {
+                sender.sendMessage(Locale.NO_PERMISSION.format(plugin));
+                return;
+            }
+
             int offenses = Stackables.offenseNumber(targetProfile, section.getName());
 
             String reason = notes == null ? section.getString("DEFAULT_REASON") : notes;

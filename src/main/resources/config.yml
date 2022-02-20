@@ -169,8 +169,12 @@ PERMISSIONS:
   BYPASS_FILTER: "punishments.filter.bypass"
   HISTORY: "punishments.history" #/history
   PUNISH: "punishments.punish" #/punish, /cmdpunish
-  UNPUNISH: "punishments.unpunish" #/unban, /unmute
-  MANUAL: "punishments.manual" #/ban, /mute, /warn, /kick, /tempban, /tempmute
+  UNPUNISH: "punishments.unpunish" #/unban, /unmute, /unblacklist
+  MANUAL_BAN: "punishments.manual.ban" #/ban, /tempban
+  MANUAL_MUTE: "punishments.manual.mute" #/mute, /tempmute
+  MANUAL_WARN: "punishments.manual.warn" #/warn
+  MANUAL_KICK: "punishments.manual.kick" #/kick
+  MANUAL_BLACKLIST: "punishments.manual.blacklist" #/blacklist
 
 MENUS:
   PUNISH:
