@@ -35,6 +35,5 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
         onDisconnect(event.getPlayer());
-        event.setLeaveMessage(null);
     }
 }
