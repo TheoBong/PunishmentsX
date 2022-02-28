@@ -1,0 +1,189 @@
+#
+# Messages.yml - PunishmentsX
+# Made with love by Cowings.
+#
+# MIT License - https://github.com/Cowings/PunishmentsX/blob/main/LICENSE
+#
+
+MESSAGES:
+  NO_PERMISSION: "&cNo Permission!"
+  SILENT_PREFIX: "&7[Silent] "
+  BROADCAST: "&a%target% was %type% by %issuer%."
+  PUNISHMENT:
+    SUCCESS: "&aYou have %type% %target% for: &f%reason%."
+    HOVER:
+      - "&f&l * &c&l%type% %silentPrefix%"
+      - "&cVictim: &f%victimName%"
+      - "&cIssuer: &f%issuerName%"
+      - "&cDuration: &f%duration%"
+      - "&cReason: &f%reason%"
+      - "&cExpires: &f%expiry%"
+  UNPUNISHMENT:
+    PARDON_PROMPT: "&aType the reason for the pardon in chat:"
+    SUCCESS: "&aYou have un%type% %target% for: &f%reason%."
+    HOVER:
+      - "&f&l * &c&l%type% %silentPrefix%"
+      - "&cVictim: &f%victimName%"
+      - "&cReason: &f%reason%"
+      - "&cPardoner: &f%issuerName%"
+      - "&cPardon Reason: &f%pardonReason%"
+  BLACKLIST_MESSAGE:
+    - "&4Your account has been blacklisted"
+    - "&fReason: %reason%"
+  BAN_MESSAGE:
+    - "&cYour account has been banned"
+    - "&cExpires: %expiry% (%expirationDate%)"
+    - ""
+    - "&fReason: %reason%"
+  WARN_MESSAGE:
+    - "&cYou have been warned by a staff member!"
+    - "&fReason: %reason%"
+  MUTE_MESSAGE:
+    - "&cYou have been muted for: &f%reason%."
+    - "&cExpires: %expiry% (%expirationDate%)"
+  KICK_MESSAGE:
+    - "You have been kicked by a staff member!"
+    - "&fReason: %reason%"
+
+PERMISSIONS:
+  RELOAD: "punishments.reload" #/pxreload
+  SILENT_VIEW: "punishments.view.silent" #See silent punishments in chat & see hover of public punishments
+  BYPASS_FILTER: "punishments.filter.bypass"
+  HISTORY: "punishments.history" #/history
+  PUNISH: "punishments.punish" #/punish, /cmdpunish
+  UNPUNISH: "punishments.unpunish" #/unban, /unmute, /unblacklist
+  MANUAL_BAN: "punishments.manual.ban" #/ban, /tempban
+  MANUAL_MUTE: "punishments.manual.mute" #/mute, /tempmute
+  MANUAL_WARN: "punishments.manual.warn" #/warn
+  MANUAL_KICK: "punishments.manual.kick" #/kick
+  MANUAL_BLACKLIST: "punishments.manual.blacklist" #/blacklist
+
+MENUS:
+  PUNISH:
+    TITLE: "Punishing: %player%"
+    SLOTS:
+      CHEATING: # Identifier
+        NAME: "&c&lCheats" # Name in GUI
+        MATERIAL: "DIAMOND_SWORD" # Material in GUI
+        DEFAULT_REASON: "Cheating" # Reason if none is specified in punish command
+        PERMISSION: "punishments.general"
+        PUNISHMENTS:
+          - "ban:30d" # 1st offense
+          - "ban:90d" # 2nd offense
+          - "ban:365d" # 3rd offense
+          - "ban:permanent" # 4th offense
+        LORE:
+          - " "
+          - "&fViolation #1: &e30 day &c(BAN)"
+          - "&fViolation #2: &e90 day &c(BAN)"
+          - "&fViolation #3: &e365 day &c(BAN)"
+          - "&fViolation #4: &ePermanent &c(BAN)"
+          - " "
+          - "&fPunishments in this category: &e%offenses%"
+      SPAMMING:
+        NAME: "&c&lSpamming"
+        MATERIAL: "PAPER"
+        DEFAULT_REASON: "Spamming"
+        PERMISSION: "punishments.general"
+        PUNISHMENTS:
+          - "mute:30m"
+          - "mute:1d"
+          - "mute:7d"
+          - "mute:30d"
+          - "mute:permanent"
+        LORE:
+          - " "
+          - "&fViolation #1: &e30 minute &c(MUTE)"
+          - "&fViolation #2: &e1 day &c(MUTE)"
+          - "&fViolation #3: &e7 day &c(MUTE)"
+          - "&fViolation #4: &e30 day &c(MUTE)"
+          - "&fViolation #5: &ePermanent &c(MUTE)"
+          - " "
+          - "&fPunishments in this category: &e%offenses%"
+          - " "
+      FOUL_LANGUAGE:
+        NAME: "&c&lFoul Language"
+        MATERIAL: "BOOK"
+        DEFAULT_REASON: "Foul Language"
+        PERMISSION: "punishments.general"
+        PUNISHMENTS:
+          - "mute:1d"
+          - "mute:7d"
+          - "mute:30d"
+          - "mute:90d"
+          - "mute:permanent"
+        LORE:
+          - " "
+          - "&fViolation #1: &e1 day &c(MUTE)"
+          - "&fViolation #2: &e7 day &c(MUTE)"
+          - "&fViolation #3: &e30 day &c(MUTE)"
+          - "&fViolation #4: &e90 day &c(MUTE)"
+          - "&fViolation #5: &ePermanent &c(MUTE)"
+          - " "
+          - "&fPunishments in this category: &e%offenses%"
+          - " "
+      ADVERTISING:
+        NAME: "&c&lAdvertising"
+        MATERIAL: "GOLD_SWORD"
+        DEFAULT_REASON: "Advertising"
+        PERMISSION: "punishments.general"
+        PUNISHMENTS:
+          - "mute:30d"
+          - "mute:90d"
+          - "mute:permanent"
+        LORE:
+          - " "
+          - "&fViolation #1: &e30 day &c(MUTE)"
+          - "&fViolation #2: &e90 day &c(MUTE)"
+          - "&fViolation #3: &ePermanent &c(MUTE)"
+          - " "
+          - "&fPunishments in this category: &e%offenses%"
+      #You can add more
+
+  HISTORY:
+    TITLE: "History: %player%"
+    ACTIVE_NAME: "&6&l%uuid%"
+    INACTIVE_NAME: "&6%uuid%"
+    MATERIALS:
+      BLACKLIST: "REDSTONE_BLOCK"
+      BAN: "IRON_SWORD"
+      MUTE: "BOOK_AND_QUILL"
+      KICK: "HOPPER"
+      WARN: "PAPER"
+    PARDONED:
+      LORE:
+        - "&7&m-----------------------------"
+        - "&eTarget: &f%victim%"
+        - "&eType: &f%type%"
+        - "&eDuration: &f%duration%"
+        - "&eStack: &f%stack%"
+        - "&eActive: &f%active%"
+        - "&7&m-----------------------------"
+        - "&eIssued on: &f%issuedDate%"
+        - "&eIssued by: &f%issuer%"
+        - "&eReason: &f%issueReason%"
+        - "&eExpiry: &f%expiry%"
+        - "&7&m-----------------------------"
+        - "&ePardoned on: &f%pardonDate%"
+        - "&ePardoned by: &f%pardoner%"
+        - "&eReason: &f%pardonReason%"
+        - "&7&m-----------------------------"
+    REGULAR:
+      LORE:
+        - "&7&m-----------------------------"
+        - "&eTarget: &f%victim%"
+        - "&eType: &f%type%"
+        - "&eDuration: &f%duration%"
+        - "&eStack: &f%stack%"
+        - "&eActive: &f%active%"
+        - "&7&m-----------------------------"
+        - "&eIssued on: &f%issuedDate%"
+        - "&eIssued by: &f%issuer%"
+        - "&eReason: &f%issueReason%"
+        - "&eExpiry: &f%expiry%"
+        - "&7&m-----------------------------"
+        - "&eClick here to pardon this player!"
+
+#
+# The End!
+#

@@ -67,7 +67,7 @@ public class CmdPunishCommand extends BaseCommand {
                 return;
             }
 
-            ConfigurationSection section = plugin.getConfig().getConfigurationSection(args[1]);
+            ConfigurationSection section = plugin.getMessagesFile().getConfigurationSection(args[1]);
             if (section == null) {
                 sender.sendMessage("Invalid stack! (Case sensitive, try all caps!)");
                 return;

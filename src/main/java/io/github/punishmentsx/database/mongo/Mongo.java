@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.Database;
@@ -31,15 +32,15 @@ public class Mongo extends Database {
         MongoClient mongoClient;
         if (plugin.getConfig().getBoolean("DATABASE.MONGO.LOCALHOST_NO_AUTH")) {
             mongoClient = MongoClients.create(MongoClientSettings.builder().uuidRepresentation(UuidRepresentation.STANDARD).build());
-            mongoDatabase = mongoClient.getDatabase(Locale.MONGO_DATABASE.format(plugin));
+            mongoDatabase = mongoClient.getDatabase(ConfigValues.MONGO_DATABASE.format(plugin));
         } else {
             MongoClientSettings mcs = MongoClientSettings.builder()
                     .uuidRepresentation(UuidRepresentation.STANDARD)
-                    .applyConnectionString(new ConnectionString(plugin.getConfig().getString(Locale.MONGO_URI.format(plugin))))
+                    .applyConnectionString(new ConnectionString(plugin.getConfig().getString(ConfigValues.MONGO_URI.format(plugin))))
                     .build();
 
             mongoClient = MongoClients.create(mcs);
-            mongoDatabase = mongoClient.getDatabase(Locale.MONGO_DATABASE.format(plugin));
+            mongoDatabase = mongoClient.getDatabase(ConfigValues.MONGO_DATABASE.format(plugin));
         }
     }
 

@@ -1,5 +1,6 @@
 package io.github.punishmentsx.database.redis;
 
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class RedisPublisher {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, ()-> {
             if(!messageQueue.isEmpty()) {
                 RedisMessage redisMessage = messageQueue.poll();
-                jedis.publish(Locale.REDIS_CHANNEL.format(plugin), redisMessage.getMessage().toString());
+                jedis.publish(ConfigValues.REDIS_CHANNEL.format(plugin), redisMessage.getMessage().toString());
             }
         }, 1, 1);
     }

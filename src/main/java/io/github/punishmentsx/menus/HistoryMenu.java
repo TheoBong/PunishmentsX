@@ -1,5 +1,6 @@
 package io.github.punishmentsx.menus;
 
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.listeners.PromptListener;
@@ -74,7 +75,7 @@ public class HistoryMenu {
 
         String issuerName = null;
         if (punishment.getIssuer() == null) {
-            issuerName = Locale.CONSOLE_NAME.format(plugin);
+            issuerName = ConfigValues.CONSOLE_NAME.format(plugin);
         } else {
             Profile issuerProfile = PlayerUtil.findPlayer(plugin, punishment.getIssuer());
             if (issuerProfile != null) {
@@ -92,7 +93,7 @@ public class HistoryMenu {
             String pardonerName = null;
 
             if (punishment.getPardoner() == null) {
-                pardonerName = Locale.CONSOLE_NAME.format(plugin);
+                pardonerName = ConfigValues.CONSOLE_NAME.format(plugin);
             } else {
                 Profile pardonerProfile = PlayerUtil.findPlayer(plugin, punishment.getPardoner());
                 if (pardonerProfile != null) {
@@ -100,7 +101,7 @@ public class HistoryMenu {
                 }
             }
 
-            ConfigurationSection section = plugin.getConfig().getConfigurationSection("MENUS.HISTORY.PARDONED");
+            ConfigurationSection section = plugin.getMessagesFile().getConfigurationSection("MENUS.HISTORY.PARDONED");
             List<String> lore = new ArrayList<>();
             for (String string : section.getStringList("LORE")) {
                 lore.add(Colors.convertLegacyColors(string
@@ -119,7 +120,7 @@ public class HistoryMenu {
             }
             button.setLore(lore);
         } else {
-            ConfigurationSection section = plugin.getConfig().getConfigurationSection("MENUS.HISTORY.REGULAR");
+            ConfigurationSection section = plugin.getMessagesFile().getConfigurationSection("MENUS.HISTORY.REGULAR");
             List<String> lore = new ArrayList<>();
             for (String string : section.getStringList("LORE")) {
                 lore.add(Colors.convertLegacyColors(string

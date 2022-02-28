@@ -1,6 +1,7 @@
 package io.github.punishmentsx.database.redis;
 
 import com.google.gson.JsonObject;
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
@@ -23,7 +24,7 @@ public class PunishRedisMessageListener implements RedisMessageListener {
     @Override
     public void onReceive(RedisMessage redisMessage) {
         JsonObject json = redisMessage.getElements();
-        if(redisMessage.getInternalChannel().equals(Locale.REDIS_CHANNEL.format(plugin))) {
+        if(redisMessage.getInternalChannel().equals(ConfigValues.REDIS_CHANNEL.format(plugin))) {
             RedisAction action = RedisAction.valueOf(json.get("action").getAsString());
 
             switch(action) {

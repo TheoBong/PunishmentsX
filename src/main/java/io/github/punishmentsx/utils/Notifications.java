@@ -1,6 +1,7 @@
 package io.github.punishmentsx.utils;
 
 import com.google.gson.JsonObject;
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.redis.RedisAction;
@@ -14,7 +15,7 @@ public class Notifications {
     public static void sendMessage(PunishmentsX plugin, boolean silent, String message, String hover) {
         if (plugin.getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
             JsonObject j = new JsonObject();
-            RedisMessage rm = new RedisMessage(Locale.REDIS_CHANNEL.format(plugin), j);
+            RedisMessage rm = new RedisMessage(ConfigValues.REDIS_CHANNEL.format(plugin), j);
 
             if(silent) {
                 j.addProperty("action", RedisAction.PUNISHMENT_SILENT.toString());

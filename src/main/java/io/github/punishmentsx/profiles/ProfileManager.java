@@ -1,6 +1,7 @@
 package io.github.punishmentsx.profiles;
 
 import com.google.gson.JsonObject;
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.Database;
@@ -74,7 +75,7 @@ public class ProfileManager {
             json.addProperty("fromServer", plugin.getConfig().getString("GENERAL.SERVER_NAME"));
             json.addProperty("uuid", profile.getUuid().toString());
 
-            plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage(Locale.REDIS_CHANNEL.format(plugin), json));
+            plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage(ConfigValues.REDIS_CHANNEL.format(plugin), json));
         }
 
         if(unload) {

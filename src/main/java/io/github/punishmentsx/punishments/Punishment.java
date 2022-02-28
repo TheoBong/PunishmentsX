@@ -1,5 +1,6 @@
 package io.github.punishmentsx.punishments;
 
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
@@ -186,14 +187,14 @@ public @Data class Punishment {
                 Player p = Bukkit.getPlayer(issuer);
                 issuerName = p.getName();
             } else {
-                issuerName = Locale.CONSOLE_NAME.format(plugin);
+                issuerName = ConfigValues.CONSOLE_NAME.format(plugin);
             }
         } else {
             if (pardoner != null) {
                 Player p = Bukkit.getPlayer(pardoner);
                 issuerName = p.getName();
             } else {
-                issuerName = Locale.CONSOLE_NAME.format(plugin);
+                issuerName = ConfigValues.CONSOLE_NAME.format(plugin);
             }
         }
 

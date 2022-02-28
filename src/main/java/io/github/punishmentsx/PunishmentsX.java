@@ -17,15 +17,21 @@ import io.github.punishmentsx.profiles.ProfileManager;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.punishments.PunishmentManager;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import xyz.leuo.gooey.Gooey;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.util.logging.Level;
 
 public class PunishmentsX extends JavaPlugin {
@@ -47,6 +53,8 @@ public class PunishmentsX extends JavaPlugin {
 
     @Getter private Database storage;
 
+    @Getter private YamlConfiguration messagesFile;
+
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
@@ -67,6 +75,10 @@ public class PunishmentsX extends JavaPlugin {
                 onDisable();
                 break;
         }
+
+        //Creates & Loads messages file.
+        createMessages();
+        reloadMessages();
 
         // Redis
         if (getConfig().getBoolean("DATABASE.REDIS.ENABLED")) {
@@ -100,6 +112,7 @@ public class PunishmentsX extends JavaPlugin {
         new QuitListener(this);
 
         // Commands
+        registerCommand(new ReloadCommand(this, "pxreload"));
         registerCommand(new HistoryCommand(this, "history"));
         registerCommand(new PunishCommands(this, "punishments"));
         registerCommand(new PunishCommand(this, "punish"));
@@ -134,6 +147,39 @@ public class PunishmentsX extends JavaPlugin {
         }
 
         storage.close();
+    }
+
+    private void createMessages() {
+        try {
+            File dataFolder = getDataFolder();
+            String file = dataFolder.toPath().toString() + "/messages.yml";
+            File messagesFile = new File(file);
+
+            if (!messagesFile.exists()) {
+                String[] files = file.split("/");
+                InputStream inputStream = getClass().getClassLoader().getResourceAsStream(files[files.length - 1]);
+                File parentFile = messagesFile.getParentFile();
+
+                if (parentFile != null) parentFile.mkdirs();
+
+                if (inputStream != null) {
+                    Files.copy(inputStream, messagesFile.toPath());
+                } else {
+                    messagesFile.createNewFile();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void reloadMessages() {
+        final File dataFolder = getDataFolder();
+        final File file = new File(dataFolder.toPath() + "/messages.yml");
+
+        if (file.exists())
+            messagesFile = YamlConfiguration.loadConfiguration(file);
+        else messagesFile = new YamlConfiguration();
     }
 
     public void registerCommand(BaseCommand command) {

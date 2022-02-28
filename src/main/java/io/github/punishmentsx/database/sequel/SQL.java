@@ -44,17 +44,25 @@ public class SQL extends Database {
 
             if (!rs.next()) return null;
 
-            UUID uuid = UUID.fromString(rs.getString("id"));
-            String currentIp = rs.getString("current_ip");
-
-
-            List<String> ipHistory = Arrays.asList(rs.getString("ip_history").split("\\s*,\\s*"));
-            List<String> punishmentsStrings = Arrays.asList(rs.getString("punishments").split("\\s*,\\s*"));
-
             List<UUID> punishments = new ArrayList<>();
-            for (String string : punishmentsStrings) {
-                punishments.add(UUID.fromString(string));
+            String punishmentsString = rs.getString("punishments");
+            if (punishmentsString != null) {
+                String[] punishmentsStrings = punishmentsString.split("\\s*,\\s*");
+                for (String string : punishmentsStrings) {
+                    punishments.add(UUID.fromString(string));
+                }
+            } else {
+                punishments = null;
             }
+
+            String ipHistoryString = rs.getString("ip_history");
+            List<String> ipHistory = null;
+            if (ipHistoryString != null) {
+                ipHistory = Arrays.asList(ipHistoryString.split("\\s*,\\s*"));
+            }
+
+            UUID uuid = rs.getString("id") == null ? null : UUID.fromString(rs.getString("id"));
+            String currentIp = rs.getString("current_ip");
 
             Profile profile = new Profile(plugin, uuid);
             importSQL(profile, name, currentIp, ipHistory, punishments);

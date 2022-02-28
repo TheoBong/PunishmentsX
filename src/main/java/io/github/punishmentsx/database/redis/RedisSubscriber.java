@@ -1,5 +1,6 @@
 package io.github.punishmentsx.database.redis;
 
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class RedisSubscriber {
     public RedisSubscriber(Jedis jedis, PunishmentsX plugin) {
         this.listeners = new HashSet<>();
 
-        this.rChannel = Locale.REDIS_CHANNEL.format(plugin);
+        this.rChannel = ConfigValues.REDIS_CHANNEL.format(plugin);
 
         this.jedisPubSub = new JedisPubSub() {
             @Override

@@ -2,19 +2,12 @@ package io.github.punishmentsx;
 
 import io.github.punishmentsx.utils.Colors;
 import lombok.AllArgsConstructor;
-import org.bukkit.ChatColor;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
 public enum Locale {
-	REDIS_CHANNEL("DATABASE.REDIS.CHANNEL"),
-	MONGO_DATABASE("DATABASE.MONGO.DB"),
-	MONGO_URI("DATABASE.MONGO.URI"),
-
 	NO_PERMISSION("MESSAGES.NO_PERMISSION"),
-	CONSOLE_NAME("GENERAL.CONSOLE_NAME"),
 
 	BLACKLIST_MESSAGE("MESSAGES.BLACKLIST_MESSAGE"),
 	BAN_MESSAGE("MESSAGES.BAN_MESSAGE"),
@@ -29,15 +22,16 @@ public enum Locale {
 	UNPUNISHMENT_SUCCESS("MESSAGES.UNPUNISHMENT.SUCCESS"),
 	UNPUNISHMENT_HOVER("MESSAGES.UNPUNISHMENT.HOVER"),
 
+	RELOAD_PERMISSION("PERMISSIONS.RELOAD"),
 	SILENT_PERMISSION("PERMISSIONS.SILENT_VIEW"),
 	HISTORY_PERMISSION("PERMISSIONS.HISTORY"),
 	PUNISH_PERMISSION("PERMISSIONS.PUNISH"),
 	UNPUNISH_PERMISSION("PERMISSIONS.UNPUNISH"),
-	BAN_PERMISSION("PERMISSIONS.MANUAL.BAN"),
-	MUTE_PERMISSION("PERMISSIONS.MANUAL.MUTE"),
-	WARN_PERMISSION("PERMISSIONS.MANUAL.WARN"),
-	KICK_PERMISSION("PERMISSIONS.MANUAL.KICK"),
-	BLACKLIST_PERMISSION("PERMISSIONS.MANUAL.BLACKLIST"),
+	BAN_PERMISSION("PERMISSIONS.MANUAL_BAN"),
+	MUTE_PERMISSION("PERMISSIONS.MANUAL_MUTE"),
+	WARN_PERMISSION("PERMISSIONS.MANUAL_WARN"),
+	KICK_PERMISSION("PERMISSIONS.MANUAL_KICK"),
+	BLACKLIST_PERMISSION("PERMISSIONS.MANUAL_BLACKLIST"),
 
 	PUNISH_TITLE("MENUS.PUNISH.TITLE"),
 
@@ -55,13 +49,13 @@ public enum Locale {
 	private String path;
 
 	public String format(PunishmentsX plugin) {
-		return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString(path));
+		return Colors.convertLegacyColors(plugin.getMessagesFile().getString(path));
 	}
 
 	public List<String> formatLines(PunishmentsX plugin) {
 		List<String> lines = new ArrayList<>();
 
-		for (String string : plugin.getConfig().getStringList(path)) {
+		for (String string : plugin.getMessagesFile().getStringList(path)) {
 			lines.add(Colors.convertLegacyColors(string));
 		}
 

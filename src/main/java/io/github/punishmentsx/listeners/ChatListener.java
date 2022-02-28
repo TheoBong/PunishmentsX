@@ -53,7 +53,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        if (plugin.getConfig().getBoolean("FILTER.ENABLED") && !player.hasPermission(plugin.getConfig().getString("PERMISSIONS.BYPASS_FILTER"))) {
+        if (plugin.getConfig().getBoolean("FILTER.ENABLED") && !player.hasPermission(plugin.getMessagesFile().getString("PERMISSIONS.BYPASS_FILTER"))) {
             if (plugin.getConfig().getBoolean("FILTER.BLOCK_UNICODE")) {
                 if (Arrays.stream(event.getMessage().split("")).map(isInvalid::matcher).anyMatch(Matcher::matches)) {
                     event.setCancelled(true);
@@ -64,6 +64,7 @@ public class ChatListener implements Listener {
 
             Filter.Reason filteredReason = plugin.getFilter().filteredMessage(event.getMessage());
             Configuration config = plugin.getConfig();
+            Configuration messages = plugin.getMessagesFile();
             if (filteredReason == null) {
                 return;
             }
@@ -89,7 +90,7 @@ public class ChatListener implements Listener {
 
                         reason = "[AutoMute] Advertising (Message: " + event.getMessage() + ")";
 
-                        stackSection = config.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
+                        stackSection = messages.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
 
                         offenses = Stackables.offenseNumber(profile, stackSection.getName());
                         punishmentsList = stackSection.getStringList("PUNISHMENTS");
@@ -119,7 +120,7 @@ public class ChatListener implements Listener {
 
                         reason = "[AutoMute] Server Disrespect (Message: " + event.getMessage() + ")";
 
-                        stackSection = config.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
+                        stackSection = messages.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
 
                         offenses = Stackables.offenseNumber(profile, stackSection.getName());
                         punishmentsList = stackSection.getStringList("PUNISHMENTS");
@@ -149,7 +150,7 @@ public class ChatListener implements Listener {
 
                         reason = "[AutoMute] Foul Language (Message: " + event.getMessage() + ")";
 
-                        stackSection = config.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
+                        stackSection = messages.getConfigurationSection("MENUS.PUNISH.SLOTS." + stack);
 
                         offenses = Stackables.offenseNumber(profile, stackSection.getName());
                         punishmentsList = stackSection.getStringList("PUNISHMENTS");

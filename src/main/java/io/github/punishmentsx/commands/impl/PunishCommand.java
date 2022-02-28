@@ -14,14 +14,12 @@ import org.bukkit.entity.Player;
 
 public class PunishCommand extends BaseCommand {
     private final PunishmentsX plugin;
-    private final Configuration config;
 
     private String notes = null;
 
     public PunishCommand(PunishmentsX plugin, String name) {
         super(name);
         this.plugin = plugin;
-        this.config = plugin.getConfig();
         this.setAliases("p");
     }
 

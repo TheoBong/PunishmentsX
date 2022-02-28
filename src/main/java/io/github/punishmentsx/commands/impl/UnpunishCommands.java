@@ -1,5 +1,6 @@
 package io.github.punishmentsx.commands.impl;
 
+import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.commands.BaseCommand;
@@ -54,7 +55,7 @@ public class UnpunishCommands extends BaseCommand {
             }
 
             UUID pardoner = null;
-            String pardonerName = Locale.CONSOLE_NAME.format(plugin);
+            String pardonerName = ConfigValues.CONSOLE_NAME.format(plugin);
             if(sender instanceof Player) {
                 Player player = (Player) sender;
                 pardonerName = player.getName();

@@ -25,7 +25,7 @@ public class PunishMenu {
     private static boolean silent;
 
     public static void openPunishMenu(PunishmentsX plugin, Player staff, Profile targetProfile, String notes) {
-        Configuration config = plugin.getConfig();
+        Configuration config = plugin.getMessagesFile();
 
         GUI gui = new GUI(Locale.PUNISH_TITLE.format(plugin).replace("%player%", targetProfile.getName()), 45);
         silent = true;
