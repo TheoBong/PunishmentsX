@@ -38,6 +38,13 @@ GENERAL:
   SERVER_NAME: "Unspecified" # Example: lobby, kitpvp, factions, etc
   CONSOLE_NAME: "CONSOLE"
 
+  # REGULAR Example: Tue May 31 23:13:07 GMT 2022
+  # AMERICAN Example: 5/31/2022 23:13:07 GMT
+  # EUROPEAN Example: 31/5/2022 23:13:07 GMT
+
+  # This feature is TODO, does not actually work.
+  DATE_FORMAT: "REGULAR"
+
   # Webhooks notify to a channel whenever a punishment/unpunishment is executed on the server.
   DISCORD_WEBHOOK:
     ENABLED: false

@@ -92,7 +92,6 @@ public class JoinListener implements Listener {
         }
 
         profile.setName(player.getName());
-        profile.addIp(player.getAddress().getAddress().getHostAddress());
 
         profile.update();
     }

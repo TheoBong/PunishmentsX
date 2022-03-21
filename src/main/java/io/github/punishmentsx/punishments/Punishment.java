@@ -19,6 +19,8 @@ import xyz.leuo.gooey.button.Button;
 import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -141,6 +143,18 @@ public @Data class Punishment {
             return "Never";
         } else {
             return expires.toString();
+//            DateFormat outputFormat;
+//
+//            switch (plugin.getConfig().getString("GENERAL.DATE_FORMAT")) {
+//                case "AMERICAN":
+//                    outputFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+//                    return outputFormat.format(expires);
+//                case "EUROPEAN":
+//                    outputFormat = new SimpleDateFormat("dd/MM/yyyy h:mm:ss a");
+//                    return outputFormat.format(expires);
+//                default:
+//                    return expires.toString();
+//            }
         }
     }
     
