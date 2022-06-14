@@ -1,6 +1,8 @@
 #
 # Config.yml - PunishmentsX
-# Made with love by Cowings.
+# Made with love by Theo.
+#
+#
 #
 # MIT License - https://github.com/Cowings/PunishmentsX/blob/main/LICENSE
 #
@@ -130,11 +132,12 @@ FILTER:
 #
 # This only works for MongoDB users. SQL support coming soon.
 #
+
 ANTI_EVASION:
   ENABLED: false
   LONG_ARMS: false
 
 #
 # The End!
-#
+# xeify is great
 
