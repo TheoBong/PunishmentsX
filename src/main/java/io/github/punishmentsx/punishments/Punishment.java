@@ -142,19 +142,19 @@ public @Data class Punishment {
         if (expires == null) {
             return "Never";
         } else {
-            return expires.toString();
-//            DateFormat outputFormat;
-//
-//            switch (plugin.getConfig().getString("GENERAL.DATE_FORMAT")) {
-//                case "AMERICAN":
-//                    outputFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
-//                    return outputFormat.format(expires);
-//                case "EUROPEAN":
-//                    outputFormat = new SimpleDateFormat("dd/MM/yyyy h:mm:ss a");
-//                    return outputFormat.format(expires);
-//                default:
-//                    return expires.toString();
-//            }
+//            return expires.toString();
+            DateFormat outputFormat;
+
+            switch (plugin.getConfig().getString("GENERAL.DATE_FORMAT")) {
+                case "AMERICAN":
+                    outputFormat = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+                    return outputFormat.format(expires);
+                case "EUROPEAN":
+                    outputFormat = new SimpleDateFormat("dd/MM/yyyy h:mm:ss a");
+                    return outputFormat.format(expires);
+                default:
+                    return expires.toString();
+            }
         }
     }
     
