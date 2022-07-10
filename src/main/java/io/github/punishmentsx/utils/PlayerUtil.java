@@ -13,7 +13,12 @@ public class PlayerUtil {
         Profile targetProfile;
 
         if (targetPlayer == null) {
-            targetProfile = plugin.getProfileManager().find(target, false);
+            if (plugin.getConfig().getBoolean("GENERAL.ONLINE_MODE")) {
+                WebPlayer webPlayer = new WebPlayer(target);
+                targetProfile = plugin.getProfileManager().find(webPlayer.getUuid(), false);
+            } else {
+                targetProfile = plugin.getProfileManager().find(target, false);
+            }
         } else {
             targetProfile = plugin.getProfileManager().get(targetPlayer.getUniqueId());
         }

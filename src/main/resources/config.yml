@@ -36,6 +36,7 @@ DATABASE:
 
 GENERAL:
   SERVER_NAME: "Unspecified" # Example: lobby, kitpvp, factions, etc
+  ONLINE_MODE: true
   CONSOLE_NAME: "CONSOLE"
 
   # REGULAR Example: Tue May 31 23:13:07 GMT 2022
