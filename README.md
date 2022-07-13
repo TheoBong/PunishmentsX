@@ -16,7 +16,8 @@ PunishmentsX uses Maven to handle dependencies & building.
 #### Compiling from source
 ```sh
 git clone https://github.com/TheoBong/PunishmentsX
-git clone https://github.com/blomer/Gooey
+curl https://github.com/blomer/Gooey/releases/tag/1.2.2
+unzip Gooey-1.2.2.zip
 cd Gooey
 mvn clean install
 cd
