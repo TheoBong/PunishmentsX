@@ -4,7 +4,7 @@ PunishmentsX is a complete punishments solution for any type of server. Punishme
 PunishmentsX supports both offline mode/cracked servers & online mode servers!
 
 To view overview, visit our SpigotMC page: [`Click Here`](https://www.spigotmc.org/resources/free-open-source-punishmentsx-punishgui-fully-configurable-advanced-filter-anti-banevasion.99210/)
-To download the plugin, visit: [`Click Here`](https://github.com/Cowings/PunishmentsX/releases)
+To download the plugin, visit: [`Click Here`](https://github.com/TheoBong/PunishmentsX/releases)
 
 ## Building
 PunishmentsX uses Maven to handle dependencies & building.
@@ -15,7 +15,7 @@ PunishmentsX uses Maven to handle dependencies & building.
 
 #### Compiling from source
 ```sh
-git clone https://github.com/Cowings/PunishmentsX
+git clone https://github.com/TheoBong/PunishmentsX
 git clone https://github.com/blomer/Gooey
 cd Gooey
 mvn clean install
@@ -38,4 +38,4 @@ Please make sure to have bug fixes/improvements in seperate pull requests from n
 * Code comments
 
 ## License
-PunishmentsX is licensed under the permissive MIT license. Please see [`LICENSE.txt`](https://github.com/Cowings/PunishmentsX/blob/main/LICENSE) for more info.
+PunishmentsX is licensed under the permissive MIT license. Please see [`LICENSE.txt`](https://github.com/TheoBong/PunishmentsX/blob/main/LICENSE) for more info.
