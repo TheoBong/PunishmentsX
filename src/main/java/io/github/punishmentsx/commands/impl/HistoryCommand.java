@@ -5,7 +5,6 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.menus.HistoryMenu;
 import io.github.punishmentsx.profiles.Profile;
-import io.github.punishmentsx.utils.PlayerUtil;
 import io.github.punishmentsx.utils.ThreadUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

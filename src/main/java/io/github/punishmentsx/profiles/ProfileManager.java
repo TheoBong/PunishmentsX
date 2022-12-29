@@ -2,7 +2,6 @@ package io.github.punishmentsx.profiles;
 
 import com.google.gson.JsonObject;
 import io.github.punishmentsx.ConfigValues;
-import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.Database;
 import io.github.punishmentsx.database.redis.RedisAction;

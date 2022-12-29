@@ -8,7 +8,6 @@ import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.utils.Colors;
 import io.github.punishmentsx.utils.PlayerUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;

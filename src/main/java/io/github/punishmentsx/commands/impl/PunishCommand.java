@@ -5,11 +5,9 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.menus.PunishMenu;
 import io.github.punishmentsx.profiles.Profile;
-import io.github.punishmentsx.utils.PlayerUtil;
 import io.github.punishmentsx.utils.ThreadUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 public class PunishCommand extends BaseCommand {

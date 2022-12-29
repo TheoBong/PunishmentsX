@@ -3,12 +3,9 @@ package io.github.punishmentsx.profiles;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.punishments.Punishment;
 import lombok.Data;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 public @Data class Profile {

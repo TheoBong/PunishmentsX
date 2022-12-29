@@ -4,8 +4,6 @@ import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
-import io.github.punishmentsx.utils.Colors;
-import io.github.punishmentsx.utils.TimeUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class JoinListener implements Listener {
     private final PunishmentsX plugin;

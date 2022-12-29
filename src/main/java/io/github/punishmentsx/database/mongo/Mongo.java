@@ -9,7 +9,6 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import io.github.punishmentsx.ConfigValues;
-import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.database.Database;
 import io.github.punishmentsx.profiles.Profile;

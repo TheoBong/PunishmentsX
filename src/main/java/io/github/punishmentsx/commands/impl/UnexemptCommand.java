@@ -6,7 +6,6 @@ import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.database.mongo.MongoUpdate;
 import io.github.punishmentsx.evasion.EvasionCheck;
 import io.github.punishmentsx.profiles.Profile;
-import io.github.punishmentsx.utils.PlayerUtil;
 import io.github.punishmentsx.utils.ThreadUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

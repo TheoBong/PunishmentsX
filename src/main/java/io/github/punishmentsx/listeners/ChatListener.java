@@ -1,3 +1,4 @@
+
 package io.github.punishmentsx.listeners;
 
 import io.github.punishmentsx.Locale;
