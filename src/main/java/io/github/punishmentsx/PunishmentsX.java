@@ -14,10 +14,8 @@ import io.github.punishmentsx.listeners.ChatListener;
 import io.github.punishmentsx.listeners.JoinListener;
 import io.github.punishmentsx.listeners.QuitListener;
 import io.github.punishmentsx.profiles.ProfileManager;
-import io.github.punishmentsx.punishments.Punishment;
 import io.github.punishmentsx.punishments.PunishmentManager;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -113,12 +111,12 @@ public class PunishmentsX extends JavaPlugin {
 
         // Commands
         registerCommand(new ReloadCommand(this, "pxreload"));
-        registerCommand(new HistoryCommand(this, "history"));
-        registerCommand(new PunishCommands(this, "punishments"));
-        registerCommand(new PunishCommand(this, "punish"));
-        registerCommand(new TempPunishCommands(this, "temppunishments"));
-        registerCommand(new UnpunishCommands(this, "unpunishments"));
-        registerCommand(new CmdPunishCommand(this, "cmdpunish"));
+        registerCommand(new HistoryCommand(this, "historique"));
+        //registerCommand(new PunishCommands(this, "punishments"));
+        registerCommand(new PunishCommand(this, "ss"));
+        //registerCommand(new TempPunishCommands(this, "temppunishments"));
+        //registerCommand(new UnpunishCommands(this, "unpunishments"));
+        //registerCommand(new CmdPunishCommand(this, "cmdpunish"));
 
         if (getConfig().getBoolean("ANTI_EVASION.ENABLED")) {
             if (storage instanceof Mongo) {

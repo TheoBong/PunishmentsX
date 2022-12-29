@@ -1,7 +1,6 @@
 package io.github.punishmentsx.database.redis;
 
 import io.github.punishmentsx.ConfigValues;
-import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;

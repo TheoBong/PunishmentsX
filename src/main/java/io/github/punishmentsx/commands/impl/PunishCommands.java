@@ -1,12 +1,10 @@
 package io.github.punishmentsx.commands.impl;
 
-import io.github.punishmentsx.ConfigValues;
 import io.github.punishmentsx.Locale;
 import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.commands.BaseCommand;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.punishments.Punishment;
-import io.github.punishmentsx.utils.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

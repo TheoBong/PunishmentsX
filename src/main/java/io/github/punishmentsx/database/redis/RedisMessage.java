@@ -15,8 +15,7 @@ public class RedisMessage {
     }
 
     public RedisMessage(String toParse) {
-        JsonParser jp = new JsonParser();
-        JsonObject json = jp.parse(toParse).getAsJsonObject();
+        JsonObject json = JsonParser.parseString(toParse).getAsJsonObject();
         internalChannel = json.get("ichannel").getAsString();
         elements = json.getAsJsonObject("elements");
     }

@@ -7,10 +7,7 @@ import io.github.punishmentsx.PunishmentsX;
 import io.github.punishmentsx.profiles.Profile;
 import io.github.punishmentsx.utils.ClickableMessage;
 import io.github.punishmentsx.utils.Colors;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class PunishRedisMessageListener implements RedisMessageListener {
 
