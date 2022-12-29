@@ -63,7 +63,7 @@ public class ExemptCommand extends BaseCommand {
 
                         mu.setUpdate(map);
                         plugin.getMongo().massUpdate(false, mu);
-                        sender.sendMessage("Ajout d'une exemption.");
+                        sender.sendMessage("Added exemption.");
                     }
                 }
             });

@@ -35,7 +35,7 @@ public class CmdPunishCommand extends BaseCommand {
         }
 
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "Usage: /cmdpunish <joueur> <stack> [notes] [-s]");
+            sender.sendMessage(ChatColor.RED + "Usage: /cmdpunish <player> <stack> [notes] [-s]");
             return;
         }
 
@@ -107,7 +107,7 @@ public class CmdPunishCommand extends BaseCommand {
                         .replace("%target%", targetProfile.getName())
                         .replace("%reason%", reason));
             } else {
-                sender.sendMessage(ChatColor.RED + "La cible que vous avez indiquée a déjà une punition active de ce type. Vous devez d'abord démuter/libérer ce joueur !");;
+                sender.sendMessage(ChatColor.RED + "The target you specified already has an active punishment of that type. You must unmute/unban that player first!");;
             }
         });
     }

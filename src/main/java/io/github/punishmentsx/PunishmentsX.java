@@ -111,12 +111,12 @@ public class PunishmentsX extends JavaPlugin {
 
         // Commands
         registerCommand(new ReloadCommand(this, "pxreload"));
-        registerCommand(new HistoryCommand(this, "historique"));
-        //registerCommand(new PunishCommands(this, "punishments"));
-        registerCommand(new PunishCommand(this, "ss"));
-        //registerCommand(new TempPunishCommands(this, "temppunishments"));
-        //registerCommand(new UnpunishCommands(this, "unpunishments"));
-        //registerCommand(new CmdPunishCommand(this, "cmdpunish"));
+        registerCommand(new HistoryCommand(this, "history"));
+        registerCommand(new PunishCommands(this, "punishments"));
+        registerCommand(new PunishCommand(this, "punish"));
+        registerCommand(new TempPunishCommands(this, "temppunishments"));
+        registerCommand(new UnpunishCommands(this, "unpunishments"));
+        registerCommand(new CmdPunishCommand(this, "cmdpunish"));
 
         if (getConfig().getBoolean("ANTI_EVASION.ENABLED")) {
             if (storage instanceof Mongo) {

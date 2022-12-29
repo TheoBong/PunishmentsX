@@ -33,7 +33,7 @@ public class PunishCommand extends BaseCommand {
         }
 
         if (args.length < 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: / " + getName() + " <player> [notes]");
+            sender.sendMessage(ChatColor.RED + "Usage: /punish <player> [notes]");
             return;
         }
 
@@ -41,6 +41,7 @@ public class PunishCommand extends BaseCommand {
             if (args.length > 1) {
                 StringBuilder sb = new StringBuilder();
                 for(int i = 1; i < args.length; i++) {
+                    String s = args[i];
                     sb.append(args[i]);
                     if (i + 1 != args.length) {
                         sb.append(" ");
